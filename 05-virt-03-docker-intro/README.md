@@ -253,3 +253,52 @@ CONTAINER ID   NAMES      IMAGE                      STATUS
 53f4e7604efa   jellyfin   jellyfin/jellyfin:latest   Up About an hour (healthy)
 
 ```
+
+## Задание 4
+
+```bash
+# sleep infinity — это команда, которая просто «спит» вечно. Контейнер будет в статусе 
+# нужно чтобы у контейнера был главный процесс, иначе контейнер сразу завершит работу
+docker run -d --name centos-data -v "$(pwd)":/data centos:centos7.9.2009 sleep infinity
+docker run -d --name debian-data -v "$(pwd)":/data debian:trixie-slim sleep infinity
+
+ijin@alt 🏠 ~                                                
+$ docker-ps                                                  
+CONTAINER ID   NAMES         IMAGE                      STATUS
+e4c1652e4d8f   debian-data   debian:trixie-slim         Up 5 seconds
+3b3c225e557e   centos-data   centos:centos7.9.2009      Up 42 seconds
+53f4e7604efa   jellyfin      jellyfin/jellyfin:latest   Up 2 hours (healthy)
+
+# Подключитесь к первому контейнеру с помощью docker exec и 
+# создайте текстовый файл любого содержания в /data
+docker exec -it centos-data bash 
+
+[root@3b3c225e557e /]# echo "hello im here" > /data/hello.txt
+[root@3b3c225e557e /]# ll /data                              
+total 36 
+-rw-r--r-- 1 1000 1000   140 Sep 15 19:22 Dockerfile         
+-rw-r--r-- 1 1000 1000 13106 Sep 15 21:02 README.md          
+drwxr-xr-x 2 1000 1000  4096 Sep 15 19:22 Screenshots        
+-rw-r--r-- 1 1000 1000   162 Sep 15 19:22 hello-net.nginx.conf
+-rw-r--r-- 1 root root    14 Sep 15 21:03 hello.txt          
+-rw-r--r-- 1 1000 1000    94 Sep 15 19:39 index.html
+
+# Добавьте ещё один файл в текущий каталог $(pwd) на хостовой машине.
+# -> Создал в VS Code "hello-from-host.txt"
+
+# Подключитесь во второй контейнер и отобразите листинг 
+# и содержание файлов в /data контейнера
+docker exec -it debian-data bash 
+root@e4c1652e4d8f:/# ls /data | grep txt
+hello-from-host.txt
+hello.txt
+root@e4c1652e4d8f:/# cat /data/hello.txt 
+hello im here
+root@e4c1652e4d8f:/# cat /data/hello-from-host.txt 
+hello im txt file from hostroot@e4c1652e4d8f:/#
+
+# Скриншот: 
+# 05-virt-03-docker-intro/Screenshots/Debian Centos 2026-09-15 23-10-01.png
+```
+
+## Задача 5
