@@ -136,7 +136,7 @@ nginx: configuration file /etc/nginx/nginx.conf test is successful
 root@58a492f70755:/# nginx -s reload
 2026/09/15 19:58:48 [notice] 303#303: signal process started
 root@58a492f70755:/# curl http://127.0.0.1:80
-curl: (7) Failed to connect to 127.0.0.1 port 80 after 0 ms: Couldn't connect to server
+curl: (7) Failed to connect to 127.0.0.1 port 80 after 0 ms: Couldn\'t connect to server
 root@58a492f70755:/# curl http://127.0.0.1:81
 <html>
 
