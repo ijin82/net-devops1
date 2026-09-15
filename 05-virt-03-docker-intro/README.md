@@ -220,7 +220,7 @@ $ docker run -d -p 8080:81 --name custom-nginx-t2-port81 custom-nginx-t2-81
 642c661e4eda003df47d5db55d5d9ebe118c701c139fdb739221c9b3a31e776c
 
 
-# (1) Удалите запущенный контейнер "custom-nginx-t2", 
+# (12) Удалите запущенный контейнер "custom-nginx-t2", 
 # не останавливая его.(воспользуйтесь --help или google)
 ijin@alt ~/Work/net-devops1/05-virt-03-docker-intro
 $ docker-ps
