@@ -302,3 +302,219 @@ hello im txt file from hostroot@e4c1652e4d8f:/#
 ```
 
 ## Задача 5
+
+```bash
+# Скриншот:
+# 05-virt-03-docker-intro/Screenshots/Task5 Step1 2026-09-15 23-20-41.png
+ijin@alt 🏠 ~
+$ mkdir -p  /tmp/netology/docker/task5
+ijin@alt 🏠 ~
+$ cd /tmp/netology/docker/task5
+ijin@alt /tmp/netology/docker/task5
+$ vim compose.yaml
+ijin@alt 🐳 /tmp/netology/docker/task5
+$ vim docker-compose.yaml
+ijin@alt 🐳 /tmp/netology/docker/task5
+$ cat compose.yaml 
+version: "3"
+services:
+  portainer:
+    network_mode: host
+    image: portainer/portainer-ce:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+ijin@alt 🐳 /tmp/netology/docker/task5
+$ cat docker-compose.yaml 
+version: "3"
+services:
+  registry:
+    image: registry:2
+
+    ports:
+    - "5000:5000"
+
+
+$ docker compose up
+WARN[0000] Found multiple config files with supported names: /tmp/netology/docker/task5/compose.yaml, /tmp/netology/docker/task5/docker-compose.yaml 
+WARN[0000] Using /tmp/netology/docker/task5/compose.yaml 
+WARN[0000] /tmp/netology/docker/task5/compose.yaml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] up 9/9
+ ✔ Image portainer/portainer-ce:latest Pulled                                                                         9.1s
+ ✔ Container task5-portainer-1         Created                                                                        0.0s
+Attaching to portainer-1
+portainer-1  | 2026/09/15 09:22PM INF github.com/portainer/portainer/api/cmd/portainer/main.go:361 > encryption key file not present | filename=/run/secrets/portainer
+portainer-1  | 2026/09/15 09:22PM INF github.com/portainer/portainer/api/cmd/portainer/main.go:399 > proceeding without encryption key |
+portainer-1  | 2026/09/15 09:22PM INF github.com/portainer/portainer/api/database/boltdb/db.go:163 > loading PortainerDB | filename=portainer.db
+portainer-1  | 2026/09/15 09:22PM INF github.com/portainer/portainer/api/internal/ssl/ssl.go:79 > no cert files found, generating self signed SSL certificates |
+portainer-1  | 2026/09/15 09:22PM INF github.com/portainer/portainer/api/http/security/setuptoken/setuptoken.go:40 > 
+portainer-1  | 
+portainer-1  | ==========================
+portainer-1  | 
+portainer-1  | setup_token=033d2c7d12cb9a365f398ec3231cce2051bb7b14587108727929d8b54e796a50
+portainer-1  | 
+portainer-1  | Paste it into the setup screen, or send it in the X-Setup-Token header.
+portainer-1  | Start with --no-setup-token to disable.
+portainer-1  | 
+portainer-1  | ========================== |
+portainer-1  | 2026/09/15 09:22PM INF github.com/portainer/portainer/api/chisel/service.go:229 > generated a new Chisel private key file | private-key=/data/chisel/private-key.pem
+portainer-1  | 2026/09/15 21:22:23 server: Reverse tunnelling enabled
+portainer-1  | 2026/09/15 21:22:23 server: Fingerprint CUzZ5XINhn7QEtaikf2tIftye8QaBzkurZU+1xNeB98=
+portainer-1  | 2026/09/15 21:22:23 server: Listening on http://0.0.0.0:8000
+portainer-1  | 2026/09/15 09:22PM INF github.com/portainer/portainer/api/cmd/portainer/main.go:707 > starting Portainer | build_number=36 go_version=go1.26.6 image_tag=2.45.0-linux-amd64 nodejs_version=v22.23.2 pnpm_version=10.27.0 version=2.45.0 webpack_version=5.107.2
+portainer-1  | 2026/09/15 09:22PM INF github.com/portainer/portainer/api/http/server.go:371 > starting HTTPS server | bind_address=:9443
+portainer-1  | 2026/09/15 09:22PM INF github.com/portainer/portainer/api/http/server.go:355 > starting HTTP server | bind_address=:9000
+portainer-1  | 2026/09/15 09:27PM INF github.com/portainer/portainer/api/adminmonitor/admin_monitor.go:60 > the Portainer instance timed out 
+
+# (1) по выводу ясно что запустился compose.yaml
+# Объяснение из шпаргалки в первом абзаце:
+# The default path for a Compose file is compose.yaml (preferred) 
+# or compose.yml that is placed in the working directory. Compose 
+# also supports docker-compose.yaml and docker-compose.yml for 
+# backwards compatibility of earlier versions. If both files 
+# exist, Compose prefers the canonical compose.yaml.
+
+# То есть поддержка старых имен файлов оставлена для обратной 
+# совместимости, но если есть compose.yaml - будет использован он.
+
+# (2) Отредактируйте файл compose.yaml так, чтобы были запущенны 
+# оба файла. (подсказка:
+
+ijin@alt 🐳 /tmp/netology/docker/task5
+$ vim compose.yaml 
+ijin@alt 🐳 /tmp/netology/docker/task5
+$ cat compose.yaml 
+version: "3"
+include:
+  - docker-compose.yaml
+services:
+  portainer:
+    network_mode: host
+    image: portainer/portainer-ce:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+# Теперь видно что запустились оба, registry-1 тоже стартовал
+
+# (3) Выполните в консоли вашей хостовой ОС необходимые команды чтобы 
+# залить образ custom-nginx как custom-nginx:latest в запущенное вами, 
+# локальное registry. Дополнительная документация: 
+# https://distribution.github.io/distribution/about/deploying/
+
+docker build -t custom-nginx:latest .
+docker tag custom-nginx:latest localhost:5000/custom-nginx
+docker push localhost:5000/custom-nginx
+
+# (4) Откройте страницу "https://127.0.0.1:9000" и произведите 
+# начальную настройку portainer.(логин и пароль адмнистратора)
+# Скриншот:
+# 05-virt-03-docker-intro/Screenshots/Portainer init setup 2 2026-09-15 23-51-31.png
+
+# (5) Откройте страницу "http://127.0.0.1:9000/#!/home", выберите ваше 
+# local окружение. Перейдите на вкладку "stacks" и в "web editor" 
+# задеплойте следующий компоуз:
+
+# (6) Перейдите на страницу "http://127.0.0.1:9000/#!/2/docker/containers", 
+# выберите контейнер с nginx и нажмите на кнопку "inspect". 
+# В представлении <> Tree разверните поле "Config" и сделайте 
+# скриншот от поля "AppArmorProfile" до "Driver".
+# Скриншоты:
+# 05-virt-03-docker-intro/Screenshots/Inspect-custom-nginx1 2026-09-15 23-58-25.png
+# 05-virt-03-docker-intro/Screenshots/Inspect-custom-nginx2 2026-09-15 23-59-03.png
+# 05-virt-03-docker-intro/Screenshots/Inspect-custom-nginx3 2026-09-16 00-00-18.png
+
+# (7) Удалите любой из манифестов компоуза(например compose.yaml). 
+# Выполните команду "docker compose up -d". Прочитайте warning, объясните 
+# суть предупреждения и выполните предложенное действие. Погасите 
+# compose-проект ОДНОЙ(обязательно!!) командой.
+ijin@alt 🐳 /tmp/netology/docker/task5
+$ ls 
+compose.yaml  docker-compose.yaml
+ijin@alt 🐳 /tmp/netology/docker/task5
+$ mv docker-compose.yaml dcremoved
+ijin@alt 🐳 /tmp/netology/docker/task5
+$ docker compose up -d
+open /tmp/netology/docker/task5/docker-compose.yaml: no such file or directory
+
+# ^^ Значит не нашел файл на который ссылается compose.yaml
+
+ijin@alt 🐳 /tmp/netology/docker/task5
+$ docker compose stats
+open /tmp/netology/docker/task5/docker-compose.yaml: no such file or directory
+
+ijin@alt 🐳 /tmp/netology/docker/task5
+$ ls
+compose.yaml  dcremoved
+
+ijin@alt 🐳 /tmp/netology/docker/task5
+$ mv dcremoved docker-compose.yaml
+
+ijin@alt 🐳 /tmp/netology/docker/task5
+$ ls
+compose.yaml  docker-compose.yaml
+
+ijin@alt 🐳 /tmp/netology/docker/task5
+$ mv compose.yaml copremoved
+
+ijin@alt /tmp/netology/docker/task5
+$ ls
+copremoved  docker-compose.yaml
+
+ijin@alt /tmp/netology/docker/task5
+$ docker compose up -d
+WARN[0000] /tmp/netology/docker/task5/docker-compose.yaml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+WARN[0000] Found orphan containers ([task5-portainer-1]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
+
+# ^^ Говорит что аттрибут версия устарел и будет проигнорирован, удалите во избежание путаницы
+# ^^2 Говорит найден контейнер-сирота (!) для этого проекта, если вы удалили или переименовали
+# этот сервис в вашем компоуз-файле, можете запуститься с флагом "удалить сирот" для очистки..
+
+# погасил проект
+ijin@alt /tmp/netology/docker/task5
+$ docker compose down
+WARN[0000] /tmp/netology/docker/task5/docker-compose.yaml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] down 2/2
+ ✔ Container task5-registry-1 Removed                                                                                 0.1s
+ ✔ Network task5_default      Removed
+
+# Удалаил версию и перезапустился с флагом..
+ijin@alt /tmp/netology/docker/task5
+$ ls
+copremoved  docker-compose.yaml
+
+ijin@alt /tmp/netology/docker/task5
+$ cp docker-compose.yaml dcremoved
+
+ijin@alt /tmp/netology/docker/task5
+$ ls
+copremoved  dcremoved  docker-compose.yaml
+
+ijin@alt /tmp/netology/docker/task5
+$ vim docker-compose.yaml 
+
+ijin@alt /tmp/netology/docker/task5
+$ cat docker-compose.yaml 
+services:
+  registry:
+    image: registry:2
+
+    ports:
+    - "5000:5000"
+
+ijin@alt /tmp/netology/docker/task5
+$ ls
+copremoved  dcremoved  docker-compose.yaml
+
+ijin@alt /tmp/netology/docker/task5
+$ docker compose up -d --remove-orphans
+[+] up 3/3
+ ✔ Network task5_default       Created                                                                                0.0s
+ ✔ Container task5-portainer-1 Removed                                                                                0.0s
+ ✔ Container task5-registry-1  Created                                                                                0.0s
+
+# Скриншот финальный
+# 05-virt-03-docker-intro/Screenshots/Last console screen 2026-09-16 00-15-25.png
+
+
+
+
+```
