@@ -1,0 +1,37 @@
+{
+    "builders": [
+        {
+            "type": "yandex",
+            "token": "t1.9eu SECRET",
+            "folder_id": "b1gl6j5lv636j3ekvebc",
+            "zone": "ru-central1-d",
+
+            "image_name": "debian-11-docker",
+            "image_family": "debian-web-server",
+            "image_description": "ijin82 custom debian with docker",
+
+            "source_image_family": "debian-11",
+            "subnet_id": "fl8vc7230aibhuvqincn",
+            "use_ipv4_nat": true,
+            "disk_type": "network-hdd",
+            "ssh_username": "debian"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "echo 'hello from packer'",
+                "sudo rm -rf /var/lib/apt/lists/*",
+                "sudo apt-get update",
+                "sudo apt-get clean",
+                "sudo apt-get update",
+                "sudo apt-get install -y openssh-server tmux htop",
+                "sudo systemctl enable ssh",
+                "sudo systemctl start ssh",
+                "sudo apt-get install -y ca-certificates curl",
+                "sudo install -m 0755 -d /etc/apt/keyrings"
+            ]
+        }
+    ]
+}
