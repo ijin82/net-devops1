@@ -53,6 +53,14 @@
    Vagrant 2.4.9
    ```
 
+   **REM** Не надо так делать - AppImage тащит за собой кучу каких-то аномальных проблем!!  
+   Вот тут можно найти нормальные пакеты  
+
+   ```bash
+   ## page https://releases.hashicorp.com/vagrant/2.4.9/
+   wget https://releases.hashicorp.com/vagrant/2.4.9/vagrant-2.4.9-1.x86_64.rpm
+   ```
+
 3. Packer
 
    ```bash
