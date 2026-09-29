@@ -375,7 +375,114 @@ OK
 4. Зайдите на сайт проверки http подключений, например(или аналогичный): ```https://check-host.net/check-http``` и запустите проверку вашего сервиса ```http://<внешний_IP-адрес_вашей_ВМ>:8090```. Таким образом трафик будет направлен в ingress-proxy. Трафик должен пройти через цепочки: Пользователь → Internet → Nginx → HAProxy → FastAPI(запись в БД) → HAProxy → Nginx → Internet → Пользователь  
   OK  
 5. (Необязательная часть) Дополнительно настройте remote ssh context к вашему серверу. Отобразите список контекстов и результат удаленного выполнения ```docker ps -a```
-  **ДОДЕЛАЮ ПОЗЖЕ**
+  
+  ```bash
+  # на локальной машине
+  
+  ijin@tatuin 🏠 ~
+  ssh ijin_yc@111.88.151.207
+
+  # на виртуалке (ubuntu 24.04)
+
+  ijin_yc@netology-docker-context-test:~$ sudo apt-get install docker.io
+  ijin_yc@netology-docker-context-test:~$ sudo usermod -aG docker ijin_yc
+  # реконнект чтобы войти с группой
+  ijin_yc@netology-docker-context-test:~$ docker ps                      
+  CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+  # на локальной машине создаю контекст и переключаюсь на него
+
+  ijin@tatuin 🏠 ~
+  $ docker context ls
+  NAME        DESCRIPTION                               DOCKER ENDPOINT               ERROR
+  default *   Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   
+  ijin@tatuin 🏠 ~
+  $ docker context create vm1 --docker "host=ijin_yc@111.88.151.207"
+  unable to create docker endpoint config: unable to apply docker endpoint options: unable to parse docker host `ijin_yc@111.88.151.207`
+  ijin@tatuin 🏠 ~
+  $ docker context create vm1 --docker "host=ssh://ijin_yc@111.88.151.207"
+  vm1
+  Successfully created context "vm1"
+  ijin@tatuin 🏠 ~
+  $ docker context ls
+  NAME        DESCRIPTION                               DOCKER ENDPOINT                ERROR
+  default *   Current DOCKER_HOST based configuration   unix:///var/run/docker.sock    
+  vm1                                                   ssh://ijin_yc@111.88.151.207   
+  ijin@tatuin 🏠 ~
+  $ docker context use vm1
+  vm1
+  Current context is now "vm1"
+  ijin@tatuin 🏠 ~
+  $ docker context ls
+  NAME      DESCRIPTION                               DOCKER ENDPOINT                ERROR
+  default   Current DOCKER_HOST based configuration   unix:///var/run/docker.sock    
+  vm1 *
+  
+  # выполняю команды в удаленном контексте 
+  ijin@tatuin 🏠 ~
+  $ docker context ls
+  NAME      DESCRIPTION                               DOCKER ENDPOINT                ERROR
+  default   Current DOCKER_HOST based configuration   unix:///var/run/docker.sock    
+  vm1 *                                               ssh://ijin_yc@111.88.151.207   
+  ijin@tatuin 🏠 ~
+  $ docker ps -a
+  CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+  ijin@tatuin 🏠 ~
+  $ docker --context=default ps -a
+  CONTAINER ID   IMAGE                      COMMAND                  CREATED        STATUS                     PORTS                                                    NAMES
+  51033cda08e6   mysql:8                    "docker-entrypoint.s…"   2 hours ago    Up 2 hours                 0.0.0.0:3306->3306/tcp, [::]:3306->3306/tcp, 33060/tcp   db
+  66396683718a   net-devops1-docker2-web    "uvicorn main:app --…"   3 hours ago    Exited (0) 3 hours ago                                                              net-devops1-docker2-web-1
+  30c3314c3890   mysql:8                    "docker-entrypoint.s…"   3 hours ago    Exited (137) 3 hours ago                                                            net-devops1-docker2-db-1
+  575f34a1b3ef   nginx:latest               "/docker-entrypoint.…"   3 hours ago    Exited (0) 3 hours ago                                                              net-devops1-docker2-ingress-proxy-1
+  42b6f03b426c   haproxy:2.4                "docker-entrypoint.s…"   3 hours ago    Exited (0) 3 hours ago                                                              net-devops1-docker2-reverse-proxy-1
+  dea7138439a4   jellyfin/jellyfin:latest   "/jellyfin/jellyfin"     5 months ago   Up 23 hours (healthy)                                                               jellyfin
+  ijin@tatuin 🏠 ~
+
+  # работаю в контексте и переключаюсь
+  ijin@tatuin 🏠 ~
+  $ docker image ls
+
+  IMAGE          ID             DISK USAGE   CONTENT SIZE   EXTRA
+
+  nginx:latest   abe47724e466        242MB         66.3MB        
+
+  ijin@tatuin 🏠 ~
+  $ docker image rm nginx:latest
+  Untagged: nginx:latest
+  Deleted: sha256:abe47724e466aeab9a345d8e46a221c2fa8953c7848bb4a3bd9976a7199f8cf2
+  
+  ijin@tatuin 🏠 ~
+  $ docker context ls
+  NAME      DESCRIPTION                               DOCKER ENDPOINT                ERROR
+  default   Current DOCKER_HOST based configuration   unix:///var/run/docker.sock    
+  vm1 *                                               ssh://ijin_yc@111.88.151.207   
+  
+  ijin@tatuin 🏠 ~
+  $ docker context use default
+  default
+  Current context is now "default"
+  
+  ijin@tatuin 🏠 ~
+  $ docker context ls
+  NAME        DESCRIPTION                               DOCKER ENDPOINT                ERROR
+  default *   Current DOCKER_HOST based configuration   unix:///var/run/docker.sock    
+  vm1                                                   ssh://ijin_yc@111.88.151.207   
+  
+  ijin@tatuin 🏠 ~
+  $ docker-ps
+  CONTAINER ID   NAMES                                 IMAGE                      STATUS
+  51033cda08e6   db                                    mysql:8                    Up 2 hours
+  66396683718a   net-devops1-docker2-web-1             net-devops1-docker2-web    Exited (0) 3 hours ago
+  30c3314c3890   net-devops1-docker2-db-1              mysql:8                    Exited (137) 3 hours ago
+  575f34a1b3ef   net-devops1-docker2-ingress-proxy-1   nginx:latest               Exited (0) 3 hours ago
+  42b6f03b426c   net-devops1-docker2-reverse-proxy-1   haproxy:2.4                Exited (0) 3 hours ago
+  dea7138439a4   jellyfin                              jellyfin/jellyfin:latest   Up 24 hours (healthy)
+  ijin@tatuin 🏠 ~
+
+  # Скриншот: 05-virt-04-docker-in-practice/Screenshots/Docker context usage 2026-09-29 13-24-00.png
+  ```
+
+
 6. Повторите SQL-запрос на сервере и приложите скриншот и ссылку на fork.  
   Ссылка на fork:  
     https://github.com/ijin82/shvirtd-example-python.git  
