@@ -49,6 +49,163 @@
   - Используйте CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000"] для запуска
   - Протестируйте корректность сборки 2.1 Используйте multistage сборку вместо single stage.
 - (Необязательная часть, *) Изучите инструкцию в проекте и запустите web-приложение без использования docker, с помощью venv. (Mysql БД можно запустить в docker run).
+
+  ```bash
+  ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+  $ python3 -m venv venv
+  ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+  $ ll
+  total 108K
+  drwxr-xr-x 6 ijin ijin 4,0K Sep 29 10:53 ./
+  drwxr-xr-x 8 ijin ijin 4,0K Sep 23 15:49 ../
+  drwxr-xr-x 7 ijin ijin 4,0K Sep 29 10:50 .git/
+  drwxr-xr-x 3 ijin ijin 4,0K Sep 23 15:49 haproxy/
+  drwxr-xr-x 3 ijin ijin 4,0K Sep 23 15:49 nginx/
+  drwxr-xr-x 5 ijin ijin 4,0K Sep 29 10:53 venv/
+  -rw-r--r-- 1 ijin ijin 2,6K Sep 28 23:53 compose.yaml
+  -rw-r--r-- 1 ijin ijin  241 Sep 23 15:49 Dockerfile
+  -rw-r--r-- 1 ijin ijin 1002 Sep 28 17:34 Dockerfile.python
+  -rw-r--r-- 1 ijin ijin  546 Sep 28 17:03 .dockerignore
+  -rw-r--r-- 1 ijin ijin  126 Sep 28 23:51 .env
+  -rw-r--r-- 1 ijin ijin 1,1K Sep 23 15:49 LICENSE
+  -rw-r--r-- 1 ijin ijin 7,1K Sep 29 10:17 main.py
+  -rw-r--r-- 1 ijin ijin  567 Sep 23 15:49 proxy.yaml
+  -rw-r--r-- 1 ijin ijin 4,0K Sep 23 15:49 README.md
+  -rw-r--r-- 1 ijin ijin   73 Sep 23 15:49 requirements.txt
+  -rw-r--r-- 1 ijin ijin  39K Sep 23 15:49 schema.pdf
+  ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+  $ . venv/bin/activate
+  ((venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+  $ pip -i requirements.txt 
+  
+  Usage:   
+    pip <command> [options]
+  
+  no such option: -i
+  ((venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+  $ pip install -r requirements.txt 
+  Collecting fastapi==0.104.1 (from -r requirements.txt (line 1))
+    Downloading fastapi-0.104.1-py3-none-any.whl.metadata (24 kB)
+  Collecting uvicorn==0.24.0 (from uvicorn[standard]==0.24.0->-r requirements.txt (line 2))
+    Downloading uvicorn-0.24.0-py3-none-any.whl.metadata (6.4 kB)
+  Collecting mysql-connector-python==8.2.0 (from -r requirements.txt (line 3))
+    Downloading mysql_connector_python-8.2.0-cp312-cp312-manylinux_2_17_x86_64.whl.metadata (2.1 kB)
+  Collecting anyio<4.0.0,>=3.7.1 (from fastapi==0.104.1->-r requirements.txt (line 1))
+    Downloading anyio-3.7.1-py3-none-any.whl.metadata (4.7 kB)
+  Collecting pydantic!=1.8,!=1.8.1,!=2.0.0,!=2.0.1,!=2.1.0,<3.0.0,>=1.7.4 (from fastapi==0.104.1->-r requirements.txt (line 1))
+    Downloading pydantic-2.13.5-py3-none-any.whl.metadata (110 kB)
+  Collecting starlette<0.28.0,>=0.27.0 (from fastapi==0.104.1->-r requirements.txt (line 1))
+    Downloading starlette-0.27.0-py3-none-any.whl.metadata (5.8 kB)
+  Collecting typing-extensions>=4.8.0 (from fastapi==0.104.1->-r requirements.txt (line 1))
+    Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+  Collecting click>=7.0 (from uvicorn==0.24.0->uvicorn[standard]==0.24.0->-r requirements.txt (line 2))
+  
+  # .....
+  
+  Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+  Installing collected packages: websockets, uvloop, typing-extensions, sniffio, pyyaml, python-dotenv, protobuf, idna, httptools, h11, click, annotated-types, uvicorn, typing-inspection, pydantic-core, mysql-connector-python, anyio, watchfiles, starlette, pydantic, fastapi
+  Successfully installed annotated-types-0.8.0 anyio-3.7.1 click-8.5.0 fastapi-0.104.1 h11-0.16.0 httptools-0.8.0 idna-3.20 mysql-connector-python-8.2.0 protobuf-4.21.12 pydantic-2.13.5 pydantic-core-2.46.5 python-dotenv-1.2.3 pyyaml-6.0.3 sniffio-1.3.1 starlette-0.27.0 typing-extensions-4.16.0 typing-inspection-0.4.4 uvicorn-0.24.0 uvloop-0.22.1 watchfiles-1.3.0 websockets-17.1
+  
+  [notice] A new release of pip is available: 25.0.1 -> 26.2.1
+  [notice] To update, run: pip install --upgrade pip
+  ((venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+
+  # Запускаем MySQL контейнер отдельно
+  ((venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+  $ docker run -d \
+    --name db \
+    --restart always \
+    --env-file .env \
+    -v db_data:/var/lib/mysql \
+    -p 3306:3306 \
+    mysql:8 --mysql-native-password=ON --authentication-policy=mysql_native_password
+  69ce6e94b68fcae6764060fa01e7ba3eef7bdc6380620f824ef196e015103bfb
+  ((venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+  $ docker-ps
+  CONTAINER ID   NAMES                                 IMAGE                      STATUS
+  69ce6e94b68f   db                                    mysql:8                    Up 2 seconds
+  66396683718a   net-devops1-docker2-web-1             net-devops1-docker2-web    Exited (0) 42 minutes ago
+  30c3314c3890   net-devops1-docker2-db-1              mysql:8                    Exited (137) 42 minutes ago
+  575f34a1b3ef   net-devops1-docker2-ingress-proxy-1   nginx:latest               Exited (0) 42 minutes ago
+  42b6f03b426c   net-devops1-docker2-reverse-proxy-1   haproxy:2.4                Exited (0) 42 minutes ago
+  dea7138439a4   jellyfin                              jellyfin/jellyfin:latest   Up 21 hours (healthy)
+  ((venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+
+  # Проблема с доступом
+
+  ((venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+  $ uvicorn main:app --host 0.0.0.0 --port 5000 --reload
+  INFO:     Will watch for changes in these directories: ['/home/ijin/Work/net-devops1-docker2']
+  INFO:     Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)
+  INFO:     Started reloader process [1142721] using WatchFiles
+  INFO:     Started server process [1142727]
+  INFO:     Waiting for application startup.
+  Приложение запускается...
+  Ошибка при создании таблицы: 1045 (28000): Access denied for user 'app'@'172.17.0.1' (using password: YES)
+  БД недоступна при старте. Таблица будет создана при первом запросе.
+  INFO:     Application startup complete.
+  ^CINFO:     Shutting down
+  INFO:     Waiting for application shutdown.
+  Приложение останавливается.
+  INFO:     Application shutdown complete.
+  INFO:     Finished server process [1142727]
+  INFO:     Stopping reloader process [1142721]
+  ((venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+
+  # очистили БД и volume убрали
+
+  ((venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+  $ docker stop db && docker rm db
+  db
+  db
+  ((venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+  $ docker volume rm db_data
+  db_data
+  ((venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+
+  # запустили бд так
+
+  docker run -d --name db \
+    --restart always \
+    -e MYSQL_ROOT_PASSWORD=YtReWq4321 -e MYSQL_DATABASE=virtd -e MYSQL_USER=app \
+    -e MYSQL_PASSWORD=QwErTy1234 -e TABLE_NAME=my_requests -v db_data:/var/lib/mysql \
+    -p 3306:3306 mysql:8 --mysql-native-password=ON --authentication-policy=mysql_native_password
+
+  # переменные окружения для приложения
+  (venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+  $ export DB_HOST='127.0.0.1'
+  ((venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+  $ export DB_USER='app'  
+  ((venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+  $ export DB_PASSWORD='QwErTy1234'
+  ((venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+  $ export DB_NAME='virtd'
+  ((venv) ) ijin@tatuin 🐳 🛠️  git:main ~/Work/net-devops1-docker2
+
+  # запустили приложение
+
+  $ uvicorn main:app --host 0.0.0.0 --port 8090 --reload
+  INFO:     Will watch for changes in these directories: ['/home/ijin/Work/net-devops1-docker2']
+  INFO:     Uvicorn running on http://0.0.0.0:8090 (Press CTRL+C to quit)
+  INFO:     Started reloader process [1172247] using WatchFiles
+  INFO:     Started server process [1172250]
+  INFO:     Waiting for application startup.
+  Приложение запускается...
+  Соединение с БД установлено и таблица 'requests' готова к работе.
+  INFO:     Application startup complete.
+  INFO:     127.0.0.1:45268 - "GET / HTTP/1.1" 200 OK
+  INFO:     127.0.0.1:45268 - "GET / HTTP/1.1" 200 OK
+  ^CINFO:     Shutting down
+  INFO:     Waiting for application shutdown.
+  Приложение останавливается.
+
+  # Ответ http://127.0.0.1:8090
+  # "TIME: 2026-09-29 11:22:03, IP: похоже, что вы направляете запрос в неверный порт(например curl http://127.0.0.1:5000). 
+  # Правильное выполнение задания - отправить запрос в порт 8090."
+  #
+  # Тут как я понимаю чтобы вернуть нормальное поведение, надо либо поднимать его за прокси, 
+  # либо в коде нужны правки, например переменная env которая отключит ветку с проверкой final_ip
+  ```
 - (Необязательная часть, *) Изучите код приложения и добавьте управление названием таблицы через ENV переменную.  
 
   Добавил в .env `TABLE_NAME` и подправил код, чтобы эту переменную использовать если она есть (f-строки)
