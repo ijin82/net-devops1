@@ -24,8 +24,7 @@ provider "yandex" {
 }
 
 provider "docker" {
-  # как это работает???
-  context = "yc-vm"
+  context = "vm-star1"
 }
 
 resource "yandex_compute_instance" "netology-terraform-star1" {
