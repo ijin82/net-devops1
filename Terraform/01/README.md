@@ -846,8 +846,322 @@ HOME=/root
 1. Установите [opentofu](https://opentofu.org/)(fork terraform с лицензией Mozilla Public License, version 2.0) любой версии
 2. Попробуйте выполнить тот же код с помощью ```tofu apply```, а не terraform apply.  
 
-> ‼️🌟  
-> ОТЛОЖИЛ, обязательно сделаю позже
+  Установил
+```bash
+ijin@tatuin 🛠️  git:master ~/Work/net-devops1
+$ tofu --version
+OpenTofu v1.13.1
+on linux_amd64
+```
+
+  Инициализация
+```bash
+ijin@tatuin ~/Work/net-devops1/Terraform/01/star2_tofu
+$ tofu init
+
+Initializing the backend...
+
+Initializing provider plugins...
+- Finding latest version of kreuzwerker/docker...
+- Finding latest version of hashicorp/random...
+╷
+│ Error: Failed to resolve provider packages
+│ 
+│ Could not resolve provider hashicorp/random: could not connect to registry.opentofu.org: failed to request discovery document: 403
+│ Forbidden
+╵
+
+╷
+│ Error: Failed to resolve provider packages
+│ 
+│ Could not resolve provider kreuzwerker/docker: could not connect to registry.opentofu.org: failed to request discovery document: 403
+│ Forbidden
+╵
+
+## Исправлено натрибуквы
+
+ijin@tatuin ~/Work/net-devops1/Terraform/01/star2_tofu
+$ tofu init
+
+Initializing the backend...
+
+Initializing provider plugins...
+- Finding latest version of kreuzwerker/docker...
+- Finding latest version of hashicorp/random...
+- Installing hashicorp/random v3.9.1...
+- Installing kreuzwerker/docker v4.6.0...
+- Installed hashicorp/random v3.9.1 (signed, key ID 0C0AF313E5FD9F80)
+- Installed kreuzwerker/docker v4.6.0 (signed, key ID 0DCE698927DAF8EC)
+
+Providers are signed by their developers.
+If you'd like to know more about provider signing, you can read about it here:
+https://opentofu.org/docs/cli/plugins/signing/
+
+OpenTofu has created a lock file .terraform.lock.hcl to record the provider
+selections it made above. Include this file in your version control repository
+so that OpenTofu can guarantee to make the same selections by default when
+you run "tofu init" in the future.
+
+OpenTofu has been successfully initialized!
+
+You may now begin working with OpenTofu. Try running "tofu plan" to see
+any changes that are required for your infrastructure. All OpenTofu commands
+should now work.
+
+If you ever set or change modules or backend configuration for OpenTofu,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+```
+
+План говорит что все совместимо!!
+
+```bash
+ijin@tatuin ~/Work/net-devops1/Terraform/01/star2_tofu
+$ tofu plan
+
+OpenTofu used the selected providers to generate the following execution plan. Resource actions are indicated with the following
+symbols:
+  + create
+
+OpenTofu will perform the following actions:
+
+  # docker_container.my1_mysql will be created
+  + resource "docker_container" "my1_mysql" {
+      + attach                                      = false
+      + bridge                                      = (known after apply)
+      + command                                     = (known after apply)
+      + container_logs                              = (known after apply)
+      + container_read_refresh_timeout_milliseconds = 15000
+      + entrypoint                                  = (known after apply)
+      + env                                         = (sensitive value)
+      + exit_code                                   = (known after apply)
+      + hostname                                    = (known after apply)
+      + id                                          = (known after apply)
+      + image                                       = (known after apply)
+      + init                                        = (known after apply)
+      + ipc_mode                                    = (known after apply)
+      + log_driver                                  = (known after apply)
+      + logs                                        = false
+      + memory_reservation                          = 0
+      + must_run                                    = true
+      + name                                        = "mysql"
+      + network_data                                = (known after apply)
+      + network_mode                                = "bridge"
+      + platform                                    = (known after apply)
+      + read_only                                   = false
+      + remove_volumes                              = true
+      + restart                                     = "no"
+      + rm                                          = false
+      + runtime                                     = (known after apply)
+      + security_opts                               = (known after apply)
+      + shm_size                                    = (known after apply)
+      + start                                       = true
+      + stdin_open                                  = false
+      + stop_signal                                 = (known after apply)
+      + stop_timeout                                = (known after apply)
+      + tty                                         = false
+      + wait                                        = false
+      + wait_timeout                                = 60
+
+      + healthcheck (known after apply)
+
+      + labels (known after apply)
+
+      + ports {
+          + external = 3306
+          + internal = 3306
+          + ip       = "0.0.0.0"
+          + protocol = "tcp"
+        }
+    }
+
+  # docker_image.my1_mysql will be created
+  + resource "docker_image" "my1_mysql" {
+      + id          = (known after apply)
+      + image_id    = (known after apply)
+      + name        = "mysql:8"
+      + repo_digest = (known after apply)
+    }
+
+  # random_password.mysql_passwords["root"] will be created
+  + resource "random_password" "mysql_passwords" {
+      + bcrypt_hash = (sensitive value)
+      + id          = (known after apply)
+      + length      = 16
+      + lower       = true
+      + min_lower   = 1
+      + min_numeric = 1
+      + min_special = 0
+      + min_upper   = 1
+      + number      = true
+      + numeric     = true
+      + result      = (sensitive value)
+      + special     = false
+      + upper       = true
+    }
+
+  # random_password.mysql_passwords["user"] will be created
+  + resource "random_password" "mysql_passwords" {
+      + bcrypt_hash = (sensitive value)
+      + id          = (known after apply)
+      + length      = 16
+      + lower       = true
+      + min_lower   = 1
+      + min_numeric = 1
+      + min_special = 0
+      + min_upper   = 1
+      + number      = true
+      + numeric     = true
+      + result      = (sensitive value)
+      + special     = false
+      + upper       = true
+    }
+
+Plan: 4 to add, 0 to change, 0 to destroy.
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so OpenTofu can't guarantee to take exactly these actions if you run "tofu
+apply" now.
+```
+
+Пересоздал контекст, прописал его в `Terraform/01/star2_tofu/main.tf:15`  
+
+```bash
+ijin@tatuin ~/Work/net-devops1/Terraform/01
+$ docker context create vm-star2 --docker 'host=ssh://ijin@51.250.97.150'
+vm-star2
+Successfully created context "vm-star2"
+ijin@tatuin ~/Work/net-devops1/Terraform/01
+$ docker context ls
+NAME        DESCRIPTION                               DOCKER ENDPOINT               ERROR
+default *   Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   
+vm-star2                                              ssh://ijin@51.250.97.150      
+wm                                                    ssh://ijin82@wired-mind.ru  
+```
+
+Тут пришлось вручную войти на ВМ чтобы добавился фингерпринт, потом ssh-add ключ
+
+```bash
+ijin@tatuin ~/Work/net-devops1/Terraform/01/star2_tofu
+$ ssh ijin@51.250.97.150
+The authenticity of host '51.250.97.150 (51.250.97.150)' can't be established.
+ED25519 key fingerprint is SHA256:hMqvzRYGQdLDK0JXOKDlJbEo/uEtUaQ1LlJ2YzG/6WY.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '51.250.97.150' (ED25519) to the list of known hosts.
+ssh: ijin@51.250.97.150: Permission denied (publickey).
+```
+
+И все сработало как ожидалось! Видимо случай простой, оказалось совместимо.
+
+```
+ijin@tatuin ~/Work/net-devops1/Terraform/01/star2_tofu
+$ tofu apply
+random_password.mysql_passwords["root"]: Refreshing state... [id=none]
+random_password.mysql_passwords["user"]: Refreshing state... [id=none]
+
+OpenTofu used the selected providers to generate the following execution plan. Resource actions are indicated with the following
+symbols:
+  + create
+
+OpenTofu will perform the following actions:
+
+  # docker_container.my1_mysql will be created
+  + resource "docker_container" "my1_mysql" {
+      + attach                                      = false
+      + bridge                                      = (known after apply)
+      + command                                     = (known after apply)
+      + container_logs                              = (known after apply)
+      + container_read_refresh_timeout_milliseconds = 15000
+      + entrypoint                                  = (known after apply)
+      + env                                         = (sensitive value)
+      + exit_code                                   = (known after apply)
+      + hostname                                    = (known after apply)
+      + id                                          = (known after apply)
+      + image                                       = (known after apply)
+      + init                                        = (known after apply)
+      + ipc_mode                                    = (known after apply)
+      + log_driver                                  = (known after apply)
+      + logs                                        = false
+      + memory_reservation                          = 0
+      + must_run                                    = true
+      + name                                        = "mysql"
+      + network_data                                = (known after apply)
+      + network_mode                                = "bridge"
+      + platform                                    = (known after apply)
+      + read_only                                   = false
+      + remove_volumes                              = true
+      + restart                                     = "no"
+      + rm                                          = false
+      + runtime                                     = (known after apply)
+      + security_opts                               = (known after apply)
+      + shm_size                                    = (known after apply)
+      + start                                       = true
+      + stdin_open                                  = false
+      + stop_signal                                 = (known after apply)
+      + stop_timeout                                = (known after apply)
+      + tty                                         = false
+      + wait                                        = false
+      + wait_timeout                                = 60
+
+      + healthcheck (known after apply)
+
+      + labels (known after apply)
+
+      + ports {
+          + external = 3306
+          + internal = 3306
+          + ip       = "0.0.0.0"
+          + protocol = "tcp"
+        }
+    }
+
+  # docker_image.my1_mysql will be created
+  + resource "docker_image" "my1_mysql" {
+      + id          = (known after apply)
+      + image_id    = (known after apply)
+      + name        = "mysql:8"
+      + repo_digest = (known after apply)
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  OpenTofu will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+docker_image.my1_mysql: Creating...
+docker_image.my1_mysql: Still creating... [10s elapsed]
+docker_image.my1_mysql: Still creating... [20s elapsed]
+docker_image.my1_mysql: Creation complete after 24s [id=sha256:6ea90827b1100f8f2ae306a539f86d2c264a26ed435a2a9f75551dd5c3aeb242mysql:8]
+docker_container.my1_mysql: Creating...
+docker_container.my1_mysql: Creation complete after 5s [id=c682465f01ff3646d5c6b79b28854e59e0c5ccfd13b0d655e30468b93a95851b]
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+ijin@tatuin ~/Work/net-devops1/Terraform/01/star2_tofu
+$ docker --context=vm-star2 exec -it mysql env
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=c682465f01ff
+TERM=xterm
+MYSQL_ROOT_HOST=%
+MYSQL_PASSWORD=JVwqid21HanWK41s
+MYSQL_DATABASE=wordpress
+MYSQL_ROOT_PASSWORD=p1XncKCQeeEmDMf6
+MYSQL_USER=wordpress
+GOSU_VERSION=1.19
+MYSQL_MAJOR=8.4
+MYSQL_VERSION=8.4.11-1.el9
+MYSQL_SHELL_VERSION=8.4.10-1.el9
+HOME=/root
+```
+
+Скриншоты:
+`Terraform/01/Screenshots/Tofu check 1 2026-10-07 20-31-14.png`  
+`Terraform/01/Screenshots/Tofu check 2 2026-10-07 20-31-40.png`  
+`Terraform/01/Screenshots/Tofu check 3 2026-10-07 20-32-25.png`  
 
 ------
 
