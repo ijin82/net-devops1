@@ -1158,7 +1158,7 @@ MYSQL_SHELL_VERSION=8.4.10-1.el9
 HOME=/root
 ```
 
-Скриншоты:
+Скриншоты:  
 `Terraform/01/Screenshots/Tofu check 1 2026-10-07 20-31-14.png`  
 `Terraform/01/Screenshots/Tofu check 2 2026-10-07 20-31-40.png`  
 `Terraform/01/Screenshots/Tofu check 3 2026-10-07 20-32-25.png`  
