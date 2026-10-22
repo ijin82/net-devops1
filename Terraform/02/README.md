@@ -353,16 +353,52 @@ ubuntu@bg01633ld67je9vtcqvc:~$ curl ifconfig.me
 ### Задание 2
 
 1. Замените все хардкод-**значения** для ресурсов **yandex_compute_image** и **yandex_compute_instance** на **отдельные** переменные. К названиям переменных ВМ добавьте в начало префикс **vm_web_** .  Пример: **vm_web_name**.
-2. Объявите нужные переменные в файле variables.tf, обязательно указывайте тип переменной. Заполните их **default** прежними значениями из main.tf. 
-3. Проверьте terraform plan. Изменений быть не должно. 
+2. Объявите нужные переменные в файле variables.tf, обязательно указывайте тип переменной. Заполните их **default** прежними значениями из main.tf.
+3. Проверьте terraform plan. Изменений быть не должно.
 
+**Скриншот** файла с переменными `Terraform/02/Screenshots/auto tfvars 2026-10-22 14-54-38.png`  
+План выполняется, всё в порядке.  
 
 ### Задание 3
 
-1. Создайте в корне проекта файл 'vms_platform.tf' . Перенесите в него все переменные первой ВМ.
-2. Скопируйте блок ресурса и создайте с его помощью вторую ВМ в файле main.tf: **"netology-develop-platform-db"** ,  ```cores  = 2, memory = 2, core_fraction = 20```. Объявите её переменные с префиксом **vm_db_** в том же файле ('vms_platform.tf').  ВМ должна работать в зоне "ru-central1-b"
+1. Создайте в корне проекта файл 'vms_platform.tf' . Перенесите в него все переменные первой ВМ.  
+> Такие именно??? Объявленные в variables.tf или из personal.auto.tfvars НЕ ПОНЯТНО  
+>
+> Перенес объявление переменных из `variables.tf`
+
+2. Скопируйте блок ресурса и создайте с его помощью вторую ВМ в файле main.tf: **"netology-develop-platform-db"** ,  ```cores  = 2, memory = 2, core_fraction = 20```. Объявите её переменные с префиксом **vm_db_** в том же файле 
+('vms_platform.tf').  ВМ должна работать в зоне "ru-central1-b"  
+Ок, для этого в `main.tf` создал подсеть в зоне d (b зона не доступна для создания ресурсов сегодня)
+
+```text
+resource "yandex_vpc_subnet" "develop_zone_d" {
+  name           = var.vpc_name_zone_d
+  zone           = var.yandex_compute_instance_zone.db
+  network_id     = yandex_vpc_network.develop.id
+  v4_cidr_blocks = var.default_cidr_zone_d
+}
+```
+
+и для `platform_db` исправил значения в секции
+
+```text
+  # нужно обязательно явно указать зону, потому что сначала будет взята зона из
+  # provider "yandex" zone 
+  # и потом уже будет попытка прицеить к ней подсеть, в этом случае зона ВМ и зона подсети
+  # должны совпадать, то есть зона подсети, имеет приоритет ниже чем дефолтная зона провайдера
+  zone        = var.yandex_compute_instance_zone.db
+
+  network_interface {
+    subnet_id = yandex_vpc_subnet.develop_zone_d.id
+    nat       = var.vm_web_yandex_compute_instance_nat
+  }
+```
+
 3. Примените изменения.
 
+**Скриншоты:**  
+`Terraform/02/Screenshots/VM created 1 2026-10-22 17-21-52.png`  
+`Terraform/02/Screenshots/VM Created 2 - zones 2026-10-22 17-22-23.png`  
 
 ### Задание 4
 
@@ -370,7 +406,6 @@ ubuntu@bg01633ld67je9vtcqvc:~$ curl ifconfig.me
 2. Примените изменения.
 
 В качестве решения приложите вывод значений ip-адресов команды ```terraform output```.
-
 
 ### Задание 5
 
