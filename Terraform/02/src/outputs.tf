@@ -23,6 +23,27 @@ output "vm_result_db" {
     }
 }
 
+## ЕДИНЫЙ output для списка VM
+
+locals {
+  test_vms = [
+    yandex_compute_instance.platform,
+    yandex_compute_instance.platform_db
+  ]
+}
+
+
+output "vm_full_db" {
+    value = [
+        for m in local.test_vms : {
+            instance_name = m.name
+            external_ip = m.network_interface[0].ip_address
+            fqdn = m.fqdn
+        }
+    ]
+}
+
+
 # Outputs:
 # 
 # vm_result_db = {

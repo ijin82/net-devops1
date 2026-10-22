@@ -407,11 +407,51 @@ resource "yandex_vpc_subnet" "develop_zone_d" {
 
 В качестве решения приложите вывод значений ip-адресов команды ```terraform output```.
 
-Ответ:
+Ответ + исправление для обеих вм:
 
 ```bash
 ijin@tatuin ~/Work/net-devops1/Terraform/02/src
 $ terraform output
+vm_result_db = {
+  "external_ip" = "10.0.2.33"
+  "fqdn" = "fv4kf6vnf8vjn2fpq260.auto.internal"
+  "instance_name" = "netology-develop-platform-db"
+}
+vm_result_web = {
+  "external_ip" = "10.0.1.20"
+  "fqdn" = "bg0l08lkj9afqd0cdk5d.auto.internal"
+  "instance_name" = "netology-develop-platform-web"
+}
+```
+
+Добавил лист с перечислением виртуалок:
+
+```text
+locals {
+  test_vms = [
+    yandex_compute_instance.platform,
+    yandex_compute_instance.platform_db
+  ]
+}
+```
+
+Единый output:  
+
+```bash
+ijin@tatuin ~/Work/net-devops1/Terraform/02/src
+$ terraform output 
+vm_full_db = [
+  {
+    "external_ip" = "10.0.1.20"
+    "fqdn" = "bg0l08lkj9afqd0cdk5d.auto.internal"
+    "instance_name" = "netology-develop-platform-web"
+  },
+  {
+    "external_ip" = "10.0.2.33"
+    "fqdn" = "fv4kf6vnf8vjn2fpq260.auto.internal"
+    "instance_name" = "netology-develop-platform-db"
+  },
+]
 vm_result_db = {
   "external_ip" = "10.0.2.33"
   "fqdn" = "fv4kf6vnf8vjn2fpq260.auto.internal"
