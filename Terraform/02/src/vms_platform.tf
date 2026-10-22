@@ -58,7 +58,7 @@ variable "vm_web_yandex_compute_instance_serial_port_enable" {
     description = "Serial port enabled or not (1 or 0)"
 }
 
-## пример набора изменяемых переменных под ВМ
+## пример набора изменяемых переменных по типу ВМ
 ## так в main.tf будут ссылки на переменные вида 
 ## var.vm_web_setup.cores
 ## var.vm_web_setup.memory

@@ -22,7 +22,7 @@ data "yandex_compute_image" "ubuntu" {
 }
 
 resource "yandex_compute_instance" "platform" {
-  name        = var.vm_web_yandex_compute_instance_name.web
+  name        = local.vm_names.web
   platform_id = var.vm_web_yandex_compute_instance_platform_id
   resources {
     cores         = var.vm_web_yandex_compute_instance_cores.web
@@ -50,7 +50,7 @@ resource "yandex_compute_instance" "platform" {
 }
 
 resource "yandex_compute_instance" "platform_db" {
-  name        = var.vm_web_yandex_compute_instance_name.db
+  name        = local.vm_names.db
   platform_id = var.vm_web_yandex_compute_instance_platform_id
   # нужно обязательно явно указать зону, потому что сначала будет взята зона из
   # provider "yandex" zone 
