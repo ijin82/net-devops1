@@ -9,4 +9,33 @@ locals {
     db: "${local.base_vm_name}db"
   }
 
+  metadata = {
+    serial-port-enable = 1
+    ssh-keys           = "ubuntu:${var.vms_ssh_root_key}"
+  }
+
+  vms_resources = {
+    web = {
+        cores=2
+        memory=2
+        core_fraction=20
+        hdd_size=10
+        hdd_type="network-hdd"
+        hdd_block_size=4096
+        preemptible=true
+        nat=false
+        zone="ru-central1-e"
+    },
+    db = {
+        cores=2
+        memory=4
+        core_fraction=50
+        hdd_size=10
+        hdd_type="network-hdd"
+        hdd_block_size=4096
+        preemptible=true
+        nat=false
+        zone="ru-central1-d"
+    }
+   }
 }

@@ -11,7 +11,7 @@
 2. Установлен инструмент Yandex CLI.
 3. Исходный код для выполнения задания расположен в директории [**02/src**](https://github.com/netology-code/ter-homeworks/tree/main/02/src).
 
-### Задание 0 + решение
+### Задание 0
 
 1. Ознакомьтесь с [документацией к security-groups в Yandex Cloud](https://cloud.yandex.ru/docs/vpc/concepts/security-groups?from=int-console-help-center-or-nav). 
 Этот функционал понадобится к следующей лекции.  
@@ -22,7 +22,7 @@
 ### Внимание!! Обязательно предоставляем на проверку получившийся код в виде ссылки на ваш github-репозиторий!
 ------
 
-### Задание 1 + решение
+### Задание 1
 В качестве ответа всегда полностью прикладывайте ваш terraform-код в git.
 Убедитесь что ваша версия **Terraform** ~>1.12.0
 
@@ -362,12 +362,11 @@ ubuntu@bg01633ld67je9vtcqvc:~$ curl ifconfig.me
 ### Задание 3
 
 1. Создайте в корне проекта файл 'vms_platform.tf' . Перенесите в него все переменные первой ВМ.  
-> Такие именно??? Объявленные в variables.tf или из personal.auto.tfvars НЕ ПОНЯТНО  
+> Какие именно??? Объявленные в variables.tf или из personal.auto.tfvars НЕ ПОНЯТНО  
 >
 > Перенес объявление переменных из `variables.tf`
 
-2. Скопируйте блок ресурса и создайте с его помощью вторую ВМ в файле main.tf: **"netology-develop-platform-db"** ,  ```cores  = 2, memory = 2, core_fraction = 20```. Объявите её переменные с префиксом **vm_db_** в том же файле 
-('vms_platform.tf').  ВМ должна работать в зоне "ru-central1-b"  
+2. Скопируйте блок ресурса и создайте с его помощью вторую ВМ в файле main.tf: **"netology-develop-platform-db"** ,  ```cores  = 2, memory = 2, core_fraction = 20```. Объявите её переменные с префиксом **vm_db_** в том же файле ('vms_platform.tf').  ВМ должна работать в зоне "ru-central1-b"  
 Ок, для этого в `main.tf` создал подсеть в зоне d (b зона не доступна для создания ресурсов сегодня)
 
 ```text
@@ -383,9 +382,9 @@ resource "yandex_vpc_subnet" "develop_zone_d" {
 
 ```text
   # нужно обязательно явно указать зону, потому что сначала будет взята зона из
-  # provider "yandex" zone 
+  # provider "yandex" -> zone 
   # и потом уже будет попытка прицеить к ней подсеть, в этом случае зона ВМ и зона подсети
-  # должны совпадать, то есть зона подсети, имеет приоритет ниже чем дефолтная зона провайдера
+  # должны совпадать, то есть зона подсети, имеет приоритет НИЖЕ чем дефолтная зона провайдера
   zone        = var.yandex_compute_instance_zone.db
 
   network_interface {
@@ -407,7 +406,7 @@ resource "yandex_vpc_subnet" "develop_zone_d" {
 
 В качестве решения приложите вывод значений ip-адресов команды ```terraform output```.
 
-Ответ + исправление для обеих вм:
+Ответ + исправление ниже для обеих вм:
 
 ```bash
 ijin@tatuin ~/Work/net-devops1/Terraform/02/src
@@ -504,9 +503,15 @@ vm_result_web = {
      ssh-keys           = "ubuntu:ssh-ed25519 AAAAC..."
    }
    ```  
+
+Добавил `metadata` и `vms_resources` в `locals.tf`  
   
 5. Найдите и закоментируйте все, более не используемые переменные проекта.
 6. Проверьте terraform plan. Изменений быть не должно.
+
+Готово. **Скриншоты:**  
+`Terraform/02/Screenshots/Task6 - VM created 2026-10-22 21-58-11.png`  
+`Terraform/02/Screenshots/Task6 - Output 2026-10-22 21-58-39.png`  
 
 ------
 
