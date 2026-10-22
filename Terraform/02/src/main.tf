@@ -63,7 +63,7 @@ resource "yandex_compute_instance" "platform_db" {
     #memory        = var.vm_web_yandex_compute_instance_memory.db
     #core_fraction = var.vm_web_yandex_compute_instance_core_fraction.db
     
-    # Переменные скомпонованы по типу ВМ
+    # Переменные скомпонованы по типу ВМ (web / db)
     cores         = var.vm_db_setup.cores
     memory        = var.vm_db_setup.memory
     core_fraction = var.vm_db_setup.core_fraction

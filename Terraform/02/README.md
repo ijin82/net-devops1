@@ -407,6 +407,23 @@ resource "yandex_vpc_subnet" "develop_zone_d" {
 
 В качестве решения приложите вывод значений ip-адресов команды ```terraform output```.
 
+Ответ:
+
+```bash
+ijin@tatuin ~/Work/net-devops1/Terraform/02/src
+$ terraform output
+vm_result_db = {
+  "external_ip" = "10.0.2.33"
+  "fqdn" = "fv4kf6vnf8vjn2fpq260.auto.internal"
+  "instance_name" = "netology-develop-platform-db"
+}
+vm_result_web = {
+  "external_ip" = "10.0.1.20"
+  "fqdn" = "bg0l08lkj9afqd0cdk5d.auto.internal"
+  "instance_name" = "netology-develop-platform-web"
+}
+```
+
 ### Задание 5
 
 1. В файле locals.tf опишите в **одном** local-блоке имя каждой ВМ, используйте интерполяцию ${..} с НЕСКОЛЬКИМИ переменными по примеру из лекции.
