@@ -23,7 +23,8 @@ locals {
         hdd_type="network-hdd"
         hdd_block_size=4096
         preemptible=true
-        nat=false
+        # nat=false
+        nat=true
         zone="ru-central1-e"
     },
     db = {
@@ -34,7 +35,8 @@ locals {
         hdd_type="network-hdd"
         hdd_block_size=4096
         preemptible=true
-        nat=false
+        # nat=false
+        nat=true
         zone="ru-central1-d"
     }
    }

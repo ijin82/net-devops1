@@ -10,7 +10,8 @@
 output "vm_result_web" {
     value = {
         instance_name: yandex_compute_instance.platform.name,
-        external_ip: yandex_compute_instance.platform.network_interface[0].ip_address,
+        nat_ip: yandex_compute_instance.platform.network_interface[0].nat_ip_address,
+        internal_ip: yandex_compute_instance.platform.network_interface[0].ip_address,
         fqdn: yandex_compute_instance.platform.fqdn,
     }
 }
@@ -18,7 +19,8 @@ output "vm_result_web" {
 output "vm_result_db" {
     value = {
         instance_name: yandex_compute_instance.platform_db.name,
-        external_ip: yandex_compute_instance.platform_db.network_interface[0].ip_address,
+        nat_ip: yandex_compute_instance.platform_db.network_interface[0].nat_ip_address,
+        internal_ip: yandex_compute_instance.platform_db.network_interface[0].ip_address,
         fqdn: yandex_compute_instance.platform_db.fqdn,
     }
 }
@@ -37,7 +39,8 @@ output "vm_full_db" {
     value = [
         for m in local.test_vms : {
             instance_name = m.name
-            external_ip = m.network_interface[0].ip_address
+            nat_ip = m.network_interface[0].nat_ip_address
+            internal_ip = m.network_interface[0].ip_address
             fqdn = m.fqdn
         }
     ]
