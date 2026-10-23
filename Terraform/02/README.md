@@ -600,9 +600,94 @@ test = [
 
 ### Задание 9*
 
-Используя инструкцию https://cloud.yandex.ru/ru/docs/vpc/operations/create-nat-gateway#tf_1, настройте для ваших ВМ nat_gateway. Для проверки уберите внешний IP адрес (nat=false) у ваших ВМ и проверьте доступ в интернет с ВМ, подключившись к ней через serial console. Для подключения предварительно через ssh измените пароль пользователя: ```sudo passwd ubuntu```
+Используя инструкцию https://cloud.yandex.ru/ru/docs/vpc/operations/create-nat-gateway#tf_1, настройте для ваших ВМ nat_gateway. Для проверки уберите внешний IP адрес (nat=false) у ваших ВМ и проверьте доступ в интернет с ВМ, подключившись к ней через serial console. Для подключения предварительно через ssh измените пароль пользователя: ```sudo passwd ubuntu```  
 
-### Правила приёма работыДля подключения предварительно через ssh измените пароль пользователя: sudo passwd ubuntu
+**Создал.** 
+```bash
+Apply complete! Resources: 8 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+vm_full_db = [
+  {
+    "fqdn" = "bg05l15u53ppio8d6c9q.auto.internal"
+    "instance_name" = "netology-develop-platform-web"
+    "internal_ip" = "10.0.1.21"
+    "nat_ip" = ""
+  },
+  {
+    "fqdn" = "fv4jrki7dkqtr1e8lbpd.auto.internal"
+    "instance_name" = "netology-develop-platform-db"
+    "internal_ip" = "10.0.2.25"
+    "nat_ip" = ""
+  },
+]
+vm_result_db = {
+  "fqdn" = "fv4jrki7dkqtr1e8lbpd.auto.internal"
+  "instance_name" = "netology-develop-platform-db"
+  "internal_ip" = "10.0.2.25"
+  "nat_ip" = ""
+}
+vm_result_web = {
+  "fqdn" = "bg05l15u53ppio8d6c9q.auto.internal"
+  "instance_name" = "netology-develop-platform-web"
+  "internal_ip" = "10.0.1.21"
+  "nat_ip" = ""
+}
+```
+
+Внешних адресов теперь нет. Скриншоты:
+`Terraform/02/Screenshots/VM no nat 1 2026-10-23 17-47-12.png`  
+`Terraform/02/Screenshots/VM no nat 2 2026-10-23 17-47-53.png`  
+`Terraform/02/Screenshots/VM no nat 3 2026-10-23 17-51-38.png`  
+Так выглядят сети:  
+`Terraform/02/Screenshots/VM no nat - net1 2026-10-23 17-55-49.png`  
+`Terraform/02/Screenshots/VM no nat - net2 2026-10-23 17-57-19.png`  
+
+Подключение к серийной консоли включено, но оно не работает из панели, что-то у Яндекса сломано до сих пор. Их помощник говорит что все должно работать.  
+Скриншоты:  
+`Terraform/02/Screenshots/Serial console enabled 2026-10-23 18-35-27.png`  
+`Terraform/02/Screenshots/Serial console - output 1 2026-10-23 18-36-12.png`  
+`Terraform/02/Screenshots/Serial console no connect 2026-10-23 18-36-47.png`  
+
+Через yc cli тоже не подключиться.  
+
+```bash
+ijin@tatuin ~/Downloads
+$ yc compute ssh   --id bg05l15u53ppio8d6c9q   --identity-file ~/.ssh/vagrant   --login ubuntu
+ssh: connect to host 10.0.1.21 port 22: Connection timed out
+ERROR: exit status 255
+
+
+client-trace-id: 75b26664-9278-492c-9dfa-caffad90bbfc
+
+Use client-trace-id for investigation of issues in cloud support
+If you are going to ask for help of cloud support, please send the following trace file: /home/ijin/.config/yandex-cloud/logs/2026-10-23T18-13-44.736-yc_compute_ssh.txt
+ijin@tatuin ~/Downloads
+$ yc compute ssh   --id bg05l15u53ppio8d6c9q   --identity-file ~/.ssh/vagrant   --login ubuntu
+ssh: connect to host 10.0.1.21 port 22: Connection timed out
+ERROR: exit status 255
+
+
+client-trace-id: d63608b6-e01d-44a2-a0fa-4ad11dc80cdf
+
+Use client-trace-id for investigation of issues in cloud support
+If you are going to ask for help of cloud support, please send the following trace file: /home/ijin/.config/yandex-cloud/logs/2026-10-23T18-22-44.088-yc_compute_ssh.txt
+ijin@tatuin ~/Downloads
+$ yc compute ssh   --id bg05l15u53ppio8d6c9q   --identity-file ~/.ssh/vagrant   --login ubuntu
+ssh: connect to host 10.0.1.21 port 22: Connection timed out
+ERROR: exit status 255
+
+
+client-trace-id: e2564cb3-73ad-4856-8b2f-24d552fa005d
+
+Use client-trace-id for investigation of issues in cloud support
+If you are going to ask for help of cloud support, please send the following trace file: /home/ijin/.config/yandex-cloud/logs/2026-10-23T18-39-54.462-yc_compute_ssh.txt
+```
+
+Может быть позже удастся дотестировать, когда все дочинят.
+
+### Правила приёма работы
 В качестве результата прикрепите ссылку на MD файл с описанием выполненой работы в вашем репозитории. Так же в репозитории должен присутсвовать ваш финальный код проекта.
 
 **Важно. Удалите все созданные ресурсы**.
