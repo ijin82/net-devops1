@@ -38,4 +38,5 @@ locals {
         zone="ru-central1-d"
     }
    }
+
 }

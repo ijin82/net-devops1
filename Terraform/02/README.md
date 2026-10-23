@@ -527,9 +527,41 @@ vm_result_web = {
 Изучите содержимое файла console.tf. Откройте terraform console, выполните следующие задания: 
 
 1. Напишите, какой командой можно отобразить **второй** элемент списка test_list.
+```bash
+ijin@tatuin ~/Work/net-devops1/Terraform/02/src
+$ terraform console
+> local.test_list
+[
+  "develop",
+  "staging",
+  "production",
+]
+> local.test_list[1]
+"staging"
+```
 2. Найдите длину списка test_list с помощью функции length(<имя переменной>).
+```text
+> length(local.test_list)
+3
+```
 3. Напишите, какой командой можно отобразить значение ключа admin из map test_map.
+```text
+> local.test_map
+{
+  "admin" = "John"
+  "user" = "Alex"
+}
+> local.test_map.admin
+"John"
+> local.test_map["admin"]
+"John"
+```
 4. Напишите interpolation-выражение, результатом которого будет: "John is admin for production server based on OS ubuntu-20-04 with X vcpu, Y ram and Z virtual disks", используйте данные из переменных test_list, test_map, servers и функцию length() для подстановки значений.
+
+```text
+> "${local.test_map.admin} is ${[ for k, v in local.test_map : k if v == "John" ][0]} for ${local.test_list[2]} server based on OS ${local.servers[local.test_list[2]].image} with ${local.servers[local.test_list[2]].cpu} vcpu, ${local.servers[local.test_list[2]].ram} ram and ${length(local.servers[local.test_list[2]].disks)} virtual disks"
+"John is admin for production server based on OS ubuntu-20-04 with 10 vcpu, 40 ram and 4 virtual disks"
+```
 
 **Примечание**: если не догадаетесь как вычленить слово "admin", погуглите: "terraform get keys of map"
 
@@ -539,7 +571,8 @@ vm_result_web = {
 
 ### Задание 8*
 1. Напишите и проверьте переменную test и полное описание ее type в соответствии со значением из terraform.tfvars:
-```
+
+```text
 test = [
   {
     "dev1" = [
@@ -561,8 +594,19 @@ test = [
   },
 ]
 ```
+
+> Не очень понимаю задание
+
+Видимо нужно привести тип к которому такая структура переменной относится? Это лист со вложенными мапами, у каждого мапа произвольный ключ и лист по значению этого ключа. Лист из строк. Сделуя этой логике описание типов переменной будет таким: `list(map(list(string)))` А в `terraform.tfvars` в задании пусто? С чем нужно проверить?
+
 2. Напишите выражение в terraform console, которое позволит вычленить строку "ssh -o 'StrictHostKeyChecking=no' ubuntu@62.84.124.117" из этой переменной.
-------
+
+добавил переменную в `console.tf` для тестов
+
+```text
+> local.test11[0].dev1[0]
+"ssh -o 'StrictHostKeyChecking=no' ubuntu@62.84.124.117"
+```
 
 ------
 
