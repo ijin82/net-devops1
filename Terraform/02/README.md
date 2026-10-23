@@ -636,7 +636,7 @@ vm_result_web = {
 }
 ```
 
-Внешних адресов теперь нет. Скриншоты:
+Внешних адресов теперь нет. Скриншоты:  
 `Terraform/02/Screenshots/VM no nat 1 2026-10-23 17-47-12.png`  
 `Terraform/02/Screenshots/VM no nat 2 2026-10-23 17-47-53.png`  
 `Terraform/02/Screenshots/VM no nat 3 2026-10-23 17-51-38.png`  
