@@ -16,7 +16,7 @@ variable "folder_id" {
 
 variable "default_zone" {
   type        = string
-  default     = "ru-central1-a"
+  default     = "ru-central1-e"
   description = "https://cloud.yandex.ru/docs/overview/concepts/geo-scope"
 }
 variable "default_cidr" {
@@ -29,4 +29,24 @@ variable "vpc_name" {
   type        = string
   default     = "develop"
   description = "VPC network&subnet name"
+}
+
+# my additional vars
+
+variable "platform_id" {
+    type        = string
+    default     = "standard-v3"
+    description = "VM platform ID"
+}
+
+variable "compute_image" {
+    type        = string
+    default     = "ubuntu-2004-lts"
+    description = "VM compute image"
+}
+
+variable "vms_ssh_key" {
+    type        = string
+    default     = "secret string"
+    description = "Authorized public key"
 }

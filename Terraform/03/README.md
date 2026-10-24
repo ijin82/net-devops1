@@ -41,17 +41,42 @@ required_version = "~>1.16.0"
 
 ### Задание 2
 
-1. Создайте файл count-vm.tf. Опишите в нём создание двух **одинаковых** ВМ  web-1 и web-2 (не web-0 и web-1) с минимальными параметрами, используя мета-аргумент **count loop**. Назначьте ВМ созданную в первом задании группу безопасности.(как это сделать узнайте в документации провайдера yandex/compute_instance )
+1. Создайте файл count-vm.tf. Опишите в нём создание двух **одинаковых** ВМ  web-1 и web-2 (не web-0 и web-1) с минимальными параметрами, используя мета-аргумент **count loop**. Назначьте ВМ созданную в первом задании группу безопасности.(как это сделать узнайте в документации провайдера yandex/compute_instance)  
+
+**Ссылки:**  
+https://yandex.cloud/ru/docs/vpc/concepts/security-groups?utm_referrer=https%3A%2F%2Fya.ru%2F
+https://yandex.cloud/ru/docs/terraform/resources/compute_instance?ysclid=mvlj1z9l1a710611416
+
+```text
+security_group_ids (Set Of String). Security Group (SG) IDs for network interface.
+```
+
+Я это где-то раньше уже делал, только хардкодил, тут нужно будет получить идентификатор созданной группы.  
+Сделано. **Скриншоты:**  
+`Terraform/03/Screenshots/task2 - 1 2026-10-24 00-21-20.png`  
+`Terraform/03/Screenshots/task2 - 2 2026-10-24 00-20-58.png`  
+
 2. Создайте файл for_each-vm.tf. Опишите в нём создание двух ВМ для баз данных с именами "main" и "replica" **разных** по cpu/ram/disk_volume , используя мета-аргумент **for_each loop**. Используйте для обеих ВМ одну общую переменную типа:
+
 ```
 variable "each_vm" {
   type = list(object({  vm_name=string, cpu=number, ram=number, disk_volume=number }))
 }
 ```  
+
+> **Cделал,** только переменную объявил в `locals` -> `local.vm_main_replica_resources`
+
 При желании внесите в переменную все возможные параметры.
+
 3. ВМ, описанные в файле count-vm.tf, должны создаваться после ВМ, описанных в файле for_each-vm.tf.
+> Добавил depends_on = [ yandex_compute_instance.web ] `for-each-vm.tf:5`
 4. Используйте функцию file в local-переменной для считывания ключа ~/.ssh/id_rsa.pub и его последующего использования в блоке metadata, взятому из ДЗ 2.
+> Добавил в `locals.tf`
+> `ssh-keys           = "ubuntu:${file("~/.ssh/vagrant.pub")}"`
 5. Инициализируйте проект, выполните код.
+
+**Скриншот:**  
+`Terraform/03/Screenshots/task2 - for_each 2026-10-24 02-06-17.png`  
 
 ------
 
