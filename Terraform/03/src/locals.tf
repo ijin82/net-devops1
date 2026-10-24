@@ -56,4 +56,24 @@ locals {
     }
   ]
 
+  # ВМ с тремя дополнительными дисками
+  vm_3disks_resources = {
+    name            = "vm_3disks"
+    cores           = 2
+    memory          = 2
+    core_fraction   = 20
+    hdd_size        = 5
+    hdd_type        = "network-hdd"
+    hdd_block_size  = 4096
+    preemptible     = true
+    nat             = true
+    zone            = "ru-central1-e"
+  }
+
+  disk_resources = {
+    type     = "network-hdd"
+    zone     = "ru-central1-e"
+    size     = 1
+  }
+
 }
