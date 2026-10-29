@@ -7,23 +7,23 @@
 
 # В качестве решения приложите вывод значений ip-адресов команды ```terraform output```.
 
-output "vm_result_web" {
-    value = {
-        instance_name: yandex_compute_instance.platform.name,
-        nat_ip: yandex_compute_instance.platform.network_interface[0].nat_ip_address,
-        internal_ip: yandex_compute_instance.platform.network_interface[0].ip_address,
-        fqdn: yandex_compute_instance.platform.fqdn,
-    }
-}
-
-output "vm_result_db" {
-    value = {
-        instance_name: yandex_compute_instance.platform_db.name,
-        nat_ip: yandex_compute_instance.platform_db.network_interface[0].nat_ip_address,
-        internal_ip: yandex_compute_instance.platform_db.network_interface[0].ip_address,
-        fqdn: yandex_compute_instance.platform_db.fqdn,
-    }
-}
+# output "vm_result_web" {
+#     value = {
+#         instance_name: yandex_compute_instance.platform.name,
+#         nat_ip: yandex_compute_instance.platform.network_interface[0].nat_ip_address,
+#         internal_ip: yandex_compute_instance.platform.network_interface[0].ip_address,
+#         fqdn: yandex_compute_instance.platform.fqdn,
+#     }
+# }
+# 
+# output "vm_result_db" {
+#     value = {
+#         instance_name: yandex_compute_instance.platform_db.name,
+#         nat_ip: yandex_compute_instance.platform_db.network_interface[0].nat_ip_address,
+#         internal_ip: yandex_compute_instance.platform_db.network_interface[0].ip_address,
+#         fqdn: yandex_compute_instance.platform_db.fqdn,
+#     }
+# }
 
 ## ЕДИНЫЙ output для списка VM
 

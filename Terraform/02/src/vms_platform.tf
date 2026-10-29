@@ -67,6 +67,95 @@ variable "vm_web_yandex_compute_instance_platform_id" {
 ## var.vm_db_setup.memory
 ## var.vm_db_setup.core_fraction
 
+
+variable vm_db_yandex_compute_instance_platform_id {
+    type        = string
+    default     = "standard-v3"
+    description = "VM platform ID"
+}
+
+variable vm_db_name {
+  type        = string
+  default     = "netology-develop-platform-db"
+  description = "VM name"
+}
+
+variable vm_db_zone {
+  type        = string
+  default     = "ru-central1-d"
+  description = "VM zone"
+}
+
+# variable vm_db_cores {
+#   type        = number
+#   default     = 2
+#   description = "Cores number (2, 3, 5, NN)"
+# }
+# 
+# variable vm_db_memory {
+#   type        = number
+#   default     = 2
+#   description = "memory in GB (1, 2, NN)"
+# }
+# 
+# variable vm_db_core_fraction {
+#   type        = number
+#   default     = 20
+#   description = "core fraction (20,50,100)"
+# }
+
+variable vms_resources {
+  type = map(object({cores = number, memory = number, core_fraction = number}))
+
+  default = {
+    web = {
+      cores = 2,
+      memory = 2,
+      core_fraction = 20
+    }
+    db = {
+      cores = 2,
+      memory = 2,
+      core_fraction = 20
+    }
+  }
+
+  description = "Expected values { cores: 2, memory: 2, core_fraction: 2 }"
+}
+
+variable vms_metadata {
+  type = map(object({serial-port-enable = number, ssh-keys = string}))
+
+  default = {
+    web = {
+      serial-port-enable = 1
+      ssh-keys           = "ubuntu:"
+    }
+    db = {
+      serial-port-enable = 1
+      ssh-keys           = "ubuntu:"
+    }
+  }
+
+  description = "Expected values { serial-port-enable = 1 ssh-keys = STRING }"
+}
+
+variable base_vm_name {
+    type = string
+    default = "netology-develop-platform-"
+    description = "Base VM name (starting with)"
+}
+
+variable vm_short_names {
+  type = map(string)
+  default = {
+    web = "web"
+    db = "db"
+  }
+  description = "Short VM names for example"
+}
+
+
 # # web
 # variable vm_web_setup {
 #     type        = map

@@ -65,31 +65,30 @@ resource "yandex_compute_instance" "platform" {
 }
 
 resource "yandex_compute_instance" "platform_db" {
-  name        = local.vm_names.db
-  platform_id = var.vm_web_yandex_compute_instance_platform_id
+  name        = var.vm_db_name
+  platform_id = var.vm_db_yandex_compute_instance_platform_id
   # нужно обязательно явно указать зону, потому что сначала будет взята зона из
   # provider "yandex" zone 
   # и потом уже будет попытка прицеить к ней подсеть, в этом случае зона ВМ и зона подсети
   # должны совпадать, то есть зона подсети, имеет приоритет ниже чем дефолтная зона провайдера
   # zone        = var.yandex_compute_instance_zone.db
-  zone            = local.vms_resources.db.zone
+  zone            = var.vm_db_zone
+
+
+  # нельзя просто сделать resources = var.vms_resources["db"] 
+  # terraform не сможет распаковать такой объект сам!!
+  # строго назначаем:
   resources {
-    cores         = local.vms_resources.db.cores
-    memory        = local.vms_resources.db.memory
-    core_fraction = local.vms_resources.db.core_fraction
+    cores = var.vms_resources["db"].cores
+    memory = var.vms_resources["db"].memory
+    core_fraction = var.vms_resources["db"].core_fraction
   }
 
-#   resources {
-#     # Переменные скомпонованы по назначению самих переменных
-#     #cores         = var.vm_web_yandex_compute_instance_cores.db
-#     #memory        = var.vm_web_yandex_compute_instance_memory.db
-#     #core_fraction = var.vm_web_yandex_compute_instance_core_fraction.db
-    
-#     # Переменные скомпонованы по типу ВМ (web / db)
-#     cores         = var.vm_db_setup.cores
-#     memory        = var.vm_db_setup.memory
-#     core_fraction = var.vm_db_setup.core_fraction
-#   }
+  metadata = {
+    serial-port-enable = var.vms_metadata["db"].serial-port-enable
+    ssh-keys = "${var.vms_metadata["db"].ssh-keys}${var.vms_ssh_root_key}"
+  }
+
   boot_disk {
     initialize_params {
       image_id = data.yandex_compute_image.ubuntu.image_id
@@ -107,12 +106,6 @@ resource "yandex_compute_instance" "platform_db" {
     nat = local.vms_resources.db.nat
     # nat       = var.vm_web_yandex_compute_instance_nat
   }
-
-  metadata = local.metadata
-#   metadata = {
-#     serial-port-enable = var.vm_web_yandex_compute_instance_serial_port_enable
-#     ssh-keys           = "ubuntu:${var.vms_ssh_root_key}"
-#   }
 
 }
 

@@ -1,12 +1,13 @@
 locals {
 
   # базовое имя ВМок для примера
-  base_vm_name = "netology-develop-platform-"
+  # ПЕРЕНЕС ЭТО В ПЕРЕМЕННЫЕ в vms_platform
+  # base_vm_name = "netology-develop-platform-"
 
-  # имена каждой ВМки с интерполяцией переменной
+  # имена каждой ВМки с интерполяцией переменнЫХ
   vm_names = {
-    web: "${local.base_vm_name}web",
-    db: "${local.base_vm_name}db"
+    web: "${var.base_vm_name}${var.vm_short_names.web}",
+    db: "${var.base_vm_name}${var.vm_short_names.db}"
   }
 
   metadata = {
@@ -39,6 +40,6 @@ locals {
         # nat=true
         zone="ru-central1-d"
     }
-   }
+  }
 
 }
