@@ -16,7 +16,7 @@ variable "folder_id" {
 
 variable "default_zone" {
   type        = string
-  default     = "ru-central1-e"
+  default     = "ru-central1-d"
   description = "https://cloud.yandex.ru/docs/overview/concepts/geo-scope"
 }
 variable "default_cidr" {
@@ -49,4 +49,121 @@ variable "vms_ssh_key" {
     type        = string
     default     = "secret string"
     description = "Authorized public key"
+}
+
+variable vm_main_replica_resources {
+  type = list(object({
+    name=string, 
+    cores=number, 
+    memory=number, 
+    core_fraction=number,
+    hdd_size=number,
+    hdd_type=string,
+    hdd_block_size=number,
+    preemptible=bool,
+    nat=bool,
+    zone=string
+    }))
+
+  default = [{
+      name                = "main"
+      cores               = 2
+      memory              = 4
+      core_fraction       = 20
+      hdd_size            = 5
+      hdd_type            = "network-hdd"
+      hdd_block_size      = 4096
+      preemptible         = true
+      nat                 = true
+      zone                = "ru-central1-d"
+    },
+    {
+      name                = "replica"
+      cores               = 2
+      memory              = 2
+      core_fraction       = 20
+      hdd_size            = 5
+      hdd_type            = "network-hdd"
+      hdd_block_size      = 4096
+      preemptible         = true
+      nat                 = true
+      zone                = "ru-central1-d"
+    }]
+
+    description = "VM resources in details"
+}
+
+
+variable vm_resources_web {
+  type = object({
+    cores=number, 
+    memory=number, 
+    core_fraction=number,
+    hdd_size=number,
+    hdd_type=string,
+    hdd_block_size=number,
+    preemptible=bool,
+    nat=bool,
+    zone=string
+  })
+
+  default = {
+    cores           = 2
+    memory          = 2
+    core_fraction   = 20
+    hdd_size        = 5
+    hdd_type        = "network-hdd"
+    hdd_block_size  = 4096
+    preemptible     = true
+    nat             = true
+    zone            = "ru-central1-d"
+  }
+
+  description = "Resources for web VM"
+}
+
+variable vm_3disks_resources {
+  type = object({
+    name=string
+    cores=number, 
+    memory=number, 
+    core_fraction=number,
+    hdd_size=number,
+    hdd_type=string,
+    hdd_block_size=number,
+    preemptible=bool,
+    nat=bool,
+    zone=string
+  })
+
+  default = {
+    name            = "vm_3disks"
+    cores           = 2
+    memory          = 2
+    core_fraction   = 20
+    hdd_size        = 5
+    hdd_type        = "network-hdd"
+    hdd_block_size  = 4096
+    preemptible     = true
+    nat             = true
+    zone            = "ru-central1-d"
+  }
+
+  description = "Resources for VM with 3 disks"
+}
+
+variable disk_resources {
+  type = object({
+    type=string
+    zone=string
+    size=number
+  })
+
+  default = {
+    type     = "network-hdd"
+    zone     = "ru-central1-d"
+    size     = 1
+  }
+
+  description = "Small sisc resources (for 3 disk exercize)"
 }
