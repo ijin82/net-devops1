@@ -17,8 +17,8 @@ resource "yandex_compute_disk" "additional_disks" {
 
 resource "yandex_compute_instance" "vm_3disks" {
 
-  name        = var.vm_3disks_resources.name
-  platform_id = var.platform_id
+  name            = var.vm_3disks_resources.name
+  platform_id     = var.platform_id
   zone            = var.vm_3disks_resources.zone
 
   resources {
@@ -36,15 +36,11 @@ resource "yandex_compute_instance" "vm_3disks" {
     }
   }
 
-
   dynamic "secondary_disk" {
     for_each = yandex_compute_disk.additional_disks
 
     content {
-      # должно работать это
-      # disk_id = each.value.id
-
-      # но работает это
+      # это динамический блок, поэтому используем ссылку на сам блок, а не на each
       disk_id = secondary_disk.value.id
     }
   }
@@ -53,6 +49,7 @@ resource "yandex_compute_instance" "vm_3disks" {
     preemptible = var.vm_3disks_resources.preemptible
   }
 
+  # идентификатор yandex_vpc_subnet.develop.id от созданной подсети
   network_interface {
     subnet_id = yandex_vpc_subnet.develop.id
     nat = var.vm_3disks_resources.nat
