@@ -3,6 +3,7 @@
 resource "yandex_compute_instance" "web" {
   count       = 2
   name        = "${local.vm_web_base_name}${count.index + 1}"
+  hostname        = "${local.vm_web_base_name}${count.index + 1}"
   platform_id = var.platform_id
   zone            = var.default_zone
   resources {

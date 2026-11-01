@@ -54,6 +54,7 @@ variable "vms_ssh_key" {
 variable vm_main_replica_resources {
   type = list(object({
     name=string, 
+    hostname=string,
     cores=number, 
     memory=number, 
     core_fraction=number,
@@ -67,6 +68,7 @@ variable vm_main_replica_resources {
 
   default = [{
       name                = "main"
+      hostname            = "main"
       cores               = 2
       memory              = 4
       core_fraction       = 20
@@ -79,6 +81,7 @@ variable vm_main_replica_resources {
     },
     {
       name                = "replica"
+      hostname            = "replica"
       cores               = 2
       memory              = 2
       core_fraction       = 20
@@ -125,6 +128,7 @@ variable vm_resources_web {
 variable vm_3disks_resources {
   type = object({
     name=string
+    hostname=string
     cores=number, 
     memory=number, 
     core_fraction=number,
@@ -138,6 +142,7 @@ variable vm_3disks_resources {
 
   default = {
     name            = "vm_3disks"
+    hostname        = "vm-3disks" # нельзя использовать подчеркивания в hostname!!
     cores           = 2
     memory          = 2
     core_fraction   = 20

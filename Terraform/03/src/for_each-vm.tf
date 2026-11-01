@@ -13,6 +13,7 @@
    # https://developer.hashicorp.com/terraform/language/meta-arguments/for_each
    for_each = { for v in var.vm_main_replica_resources : v.name => v }
    name        = each.value.name
+   hostname    = each.value.hostname
    platform_id = var.platform_id
    zone            = each.value.zone
    resources {

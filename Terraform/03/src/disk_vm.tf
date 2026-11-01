@@ -20,6 +20,7 @@ resource "yandex_compute_instance" "vm_3disks" {
   name            = var.vm_3disks_resources.name
   platform_id     = var.platform_id
   zone            = var.vm_3disks_resources.zone
+  hostname        = var.vm_3disks_resources.hostname
 
   resources {
     cores         = var.vm_3disks_resources.cores

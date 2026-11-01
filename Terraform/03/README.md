@@ -119,6 +119,17 @@ storage ansible_host=<внешний ip-адрес> fqdn=<полное доме�
 Для общего зачёта создайте в вашем GitHub-репозитории новую ветку terraform-03. Закоммитьте в эту ветку свой финальный код проекта, пришлите ссылку на коммит.  
 **Удалите все созданные ресурсы**.
 
+**Результат, скриншоты:**  
+`Terraform/03/Screenshots/task4 - for.ini 2026-11-01 21-17-54.png`  
+`Terraform/03/Screenshots/task4 - hosts.ini 2026-11-01 21-25-30.png`  
+`Terraform/03/Screenshots/task4 - hosts.yaml 2026-11-01 21-18-35.png`  
+`Terraform/03/Screenshots/task4 - VMs YC 2026-11-01 21-16-53.png`  
+**Добавил FQDN:**  
+`Terraform/03/Screenshots/task4 - FQDN - for.ini 2026-11-01 21-55-44.png`  
+`Terraform/03/Screenshots/task4 - FQDN - hosts.ini 2026-11-01 21-55-32.png`  
+`Terraform/03/Screenshots/task4 - FQDN - hosts.yaml 2026-11-01 21-55-14.png`  
+`Terraform/03/Screenshots/task4 - FQDN - VMs 2026-11-01 21-56-41.png`  
+
 ------
 
 ## Дополнительные задания (со звездочкой*)
@@ -145,6 +156,12 @@ storage ansible_host=<внешний ip-адрес> fqdn=<полное доме�
 ]
 ```
 Приложите скриншот вывода команды ```terrafrom output```.
+
+**Результат, скриншоты:**  
+Файл `Terraform/03/src/outputs.tf`  
+`Terraform/03/Screenshots/task5 - output 2026-11-01 21-16-31.png`  
+**Добавил FQDN:**  
+`Terraform/03/Screenshots/task4 - FQDN - output 2026-11-01 21-55-56.png`  
 
 ------
 
