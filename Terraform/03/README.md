@@ -174,6 +174,8 @@ storage ansible_host=<внешний ip-адрес> fqdn=<полное доме�
 Для проверки работы уберите у ВМ внешние адреса(nat=false). Этот вариант используется при работе через bastion-сервер.
 Для зачёта предоставьте код вместе с основной частью задания.
 
+**НЕ СДЕЛАНО, горю по времени. Дальше есть решения.**  
+
 ### Правила приёма работы
 
 В своём git-репозитории создайте новую ветку terraform-03, закоммитьте в эту ветку свой финальный код проекта. Ответы на задания и необходимые скриншоты оформите в md-файле в ветке terraform-03.
@@ -245,10 +247,96 @@ ${i["name"]} ansible_host=${i["network_interface"][0]["nat_ip_address"] platform
 %{~ endfor ~}
 ```
 
+**Решение:**  
+Код для отладки добавлен здесь: `Terraform/03/src/inventory.tf:72`  
+
+Ошибка:  
+
+```text
+│     │ while calling templatefile(path, vars)
+│     │ path.module is "."
+│     │ yandex_compute_instance.vm_3disks is object with 31 attributes
+│ 
+│ Call to function "templatefile" failed: ./hosts_task8.tftpl:3,85-86: Invalid character; This character is not used within the
+```
+
+Исправленный шаблон (круглая скобка в конце была от переменной nat_ip_address + пробел случайный рядом с platform_id):  
+
+```text
+${i["name"]} ansible_host=${i["network_interface"][0]["nat_ip_address"]} platform_id=${i["platform_id"]}
+```
+
 ### Задание 9* (необязательное)
 Напишите  terraform выражения, которые сформируют списки:
 1. ["rc01","rc02","rc03","rc04",rc05","rc06",rc07","rc08","rc09","rc10....."rc99"] те список от "rc01" до "rc99"
 2. ["rc01","rc02","rc03","rc04",rc05","rc06","rc11","rc12","rc13","rc14",rc15","rc16","rc19"....."rc96"] те список от "rc01" до "rc96", пропуская все номера, заканчивающиеся на "0","7", "8", "9", за исключением "rc19"
+
+**Решение:**  
+```text
+> sort(values({ for i in range(1, 100) : i => "rc${format("%02d",i)}" }))
+tolist([
+  "rc01",
+  "rc02",
+  "rc03",
+  "rc04",
+  "rc05",
+  "rc06",
+  "rc07",
+  "rc08",
+  "rc09",
+  "rc10",
+  "rc11",
+  "rc12",
+  "rc13",
+...
+...
+  "rc92",
+  "rc93",
+  "rc94",
+  "rc95",
+  "rc96",
+  "rc97",
+  "rc98",
+  "rc99",
+])
+```
+
+**Второе решение:**  
+
+```text
+> sort(values({ for i in range(1, 100) : i => "rc${format("%02d",i)}" if !(contains([0,7,8,9], i % 10) && i != 19)  }))
+tolist([
+  "rc01",
+  "rc02",
+  "rc03",
+  "rc04",
+  "rc05",
+  "rc06",
+  "rc11",
+  "rc12",
+  "rc13",
+  "rc14",
+  "rc15",
+  "rc16",
+  "rc19",
+  "rc21",
+  "rc22",
+  "rc23",
+  "rc24",
+  "rc25",
+  "rc26",
+  "rc31",
+  "rc32",
+  "rc33",
+...
+...
+  "rc92",
+  "rc93",
+  "rc94",
+  "rc95",
+  "rc96",
+])
+```
 
 ### Критерии оценки
 

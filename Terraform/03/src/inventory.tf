@@ -67,3 +67,19 @@ all:
 EOT
   filename = "${abspath(path.module)}/hosts.yaml"
 }
+
+
+# Для задания 8
+resource "local_file" "hosts_templatefile_task8" {
+  content = templatefile("${path.module}/hosts_task8.tftpl", {
+    # все сервера склеиваем в общий лист
+    webservers = concat(
+      # разворачиваем мапы в листы
+      yandex_compute_instance.web, # при использовании "count" Это уже лист!!
+      values(yandex_compute_instance.main_replica), # при использовании "foreach" - это map - приводим мап к листу
+      [yandex_compute_instance.vm_3disks] # приводим один объект к листу
+    )
+  })
+
+  filename = "${abspath(path.module)}/hosts.ini"
+}
