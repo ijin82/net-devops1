@@ -87,4 +87,30 @@ locals {
 #     size     = 1
 #   }
 
+
+  # Задание 7
+  vpc = {
+    "network_id" = "enp7i560tb28nageq0cc"
+    "subnet_ids" = [
+      "e9b0le401619ngf4h68n",
+      "e2lbar6u8b2ftd7f5hia",
+      "b0ca48coorjjq93u36pl",
+      "fl8ner8rjsio6rcpcf0h",
+    ]
+    "subnet_zones" = [
+      "ru-central1-a",
+      "ru-central1-b",
+      "ru-central1-c",
+      "ru-central1-d",
+    ]
+  }
+
+  # муки мученические, вложенные тринарные операторы с циклами
+  vpc_cleaned = {
+    for k, v in local.vpc : k => (
+      (k == "subnet_ids" || k == "subnet_zones")
+      ? [for elem_index, str_value in v : str_value if elem_index != 2]
+      : v
+    )
+  }
 }

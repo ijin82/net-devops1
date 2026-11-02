@@ -219,6 +219,23 @@ storage ansible_host=<внешний ip-адрес> fqdn=<полное доме�
   ]
 }
 ```
+
+**Решение:**  
+Документация `https://developer.hashicorp.com/terraform/language/functions#collection-functions`  
+Код `Terraform/03/src/locals.tf:109`  
+Вывод: это не привычно и не удобно читать - надо привыкать.  
+Я надеялся что хотя бы многострочный if можно сделать чтобы читалось.  
+
+```hcl
+vpc_cleaned = {
+    for k, v in local.vpc : k => (
+      (k == "subnet_ids" || k == "subnet_zones")
+      ? [for elem_index, str_value in v : str_value if elem_index != 2]
+      : v
+    )
+  }
+```
+
 ### Задание 8* (необязательное)
 Идентифицируйте и устраните намеренно допущенную в tpl-шаблоне ошибку. Обратите внимание, что terraform сам сообщит на какой строке и в какой позиции ошибка!
 ```
