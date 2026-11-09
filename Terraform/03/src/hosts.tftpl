@@ -1,6 +1,30 @@
+%{if length(webservers) > 0 ~}
 [webservers]
 
 %{~ for i in webservers ~}
-${i["name"]}   ansible_host=${i["network_interface"][0]["nat_ip_address"]}
+%{if length(webservers) > 0 ~}
+${i["name"]}   ansible_host=${i["network_interface"][0]["ip_address"]} fqdn=${i.fqdn}
+%{else ~}
+${i["name"]}   ansible_host=${i["network_interface"][0]["nat_ip_address"]} fqdn=${i.fqdn}
+%{endif ~}
 
 %{~ endfor ~}
+%{endif ~}
+
+%{if length(databases) > 0 ~}
+[databases]
+
+%{~ for i in databases ~}
+${i["name"]}   ansible_host=${i["network_interface"][0]["nat_ip_address"]} fqdn=${i.fqdn}
+
+%{~ endfor ~}
+%{endif ~}
+
+%{if length(storage) > 0 ~}
+[storage]
+
+%{~ for i in storage ~}
+${i["name"]}   ansible_host=${i["network_interface"][0]["nat_ip_address"]} fqdn=${i.fqdn}
+
+%{~ endfor ~}
+%{endif ~}

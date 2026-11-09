@@ -1,12 +1,10 @@
 resource "local_file" "hosts_templatefile" {
   content = templatefile("${path.module}/hosts.tftpl", {
-    # все сервера склеиваем в общий лист
-    webservers = concat(
-      # разворачиваем мапы в листы
-      yandex_compute_instance.web, # при использовании "count" Это уже лист!!
-      values(yandex_compute_instance.main_replica), # при использовании "foreach" - это map - приводим мап к листу
-      [yandex_compute_instance.vm_3disks] # приводим один объект к листу
-    )
+    
+    # Исправленные переменные
+    webservers = yandex_compute_instance.web # при использовании "count" Это уже лист!!
+    databases = values(yandex_compute_instance.main_replica), # при использовании "foreach" - это map - приводим мап к листу
+    storage = [yandex_compute_instance.vm_3disks] # приводим один объект к листу
   })
 
   filename = "${abspath(path.module)}/hosts.ini"
@@ -81,5 +79,5 @@ resource "local_file" "hosts_templatefile_task8" {
     )
   })
 
-  filename = "${abspath(path.module)}/hosts.ini"
+  filename = "${abspath(path.module)}/hosts_task8.ini"
 }

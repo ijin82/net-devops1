@@ -3,8 +3,6 @@
  # по диску 4 виртуалки съедают квоту 20гб и больше ничего не запихнуть
  # VM creation with for_each usage
  resource "yandex_compute_instance" "main_replica" {
-   depends_on = [ yandex_compute_instance.web ]
- 
    # for_each = var.vm_main_replica_resources
    # в случае если у нас список 
    # мы пробегаемся по списку объектов и формируем ключ 

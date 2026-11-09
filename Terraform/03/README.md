@@ -353,3 +353,27 @@ tolist([
 * в логике выполнения заданий есть противоречия и существенные недостатки. 
 
 
+---
+
+## ДОРАБОТКИ
+
+ > Илья, привет. Хардкод вынесен в переменные, dynamic secondary_disk на месте, звёздочки 7–9 сделаны. Но:  
+> основной инвентарь из задания 4 через templatefile (hosts.tftpl) складывает все 5 ВМ в одну группу [webservers], и в нём нет fqdn. Правильный инвентарь с тремя группами у вас собран heredoc’ом в for.ini, а не через templatefile;
+
+Исправил, скриншоты:  
+`Terraform/03/Screenshots/Fixed hosts.ini 2026-11-09 21-26-04.png`  
+`Terraform/03/Screenshots/Fixed hosts.tftpl 2026-11-09 21-27-46.png`  
+Код: `Terraform/03/src/inventory.tf:4`  
+
+> hosts_templatefile и hosts_templatefile_task8 пишут в один и тот же файл hosts.ini и затирают друг друга;
+
+Да, исправил запись 8го примера на `filename = "${abspath(path.module)}/hosts_task8.ini"`  
+Код: `Terraform/03/src/inventory.tf:84`  
+Скриншот: `Terraform/03/Screenshots/Fixed hosts_task8.ini 2026-11-09 21-25-14.png`  
+
+> Ну и мелочь на внимательность:  
+> зависимость перевёрнута: по заданию web из count-vm.tf создаются после ВМ БД, а у вас depends_on = [yandex_compute_instance.web] стоит у main/replica;  
+
+Исправлено, перенес depends_on (теперь web после main_replica) `Terraform/03/src/count-vm.tf:5`
+
+>Жду исправлений.

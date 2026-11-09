@@ -1,6 +1,9 @@
 # VM creation with count usage
 
 resource "yandex_compute_instance" "web" {
+  # web теперь создаются после БД
+  depends_on = [ yandex_compute_instance.main_replica ]
+
   count       = 2
   name        = "${local.vm_web_base_name}${count.index + 1}"
   hostname        = "${local.vm_web_base_name}${count.index + 1}"
