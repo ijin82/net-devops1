@@ -21,7 +21,7 @@
 ------
 
 ### Задание 1
-
+  
 1. Возьмите из [демонстрации к лекции готовый код](https://github.com/netology-code/ter-homeworks/tree/main/04/demonstration1) для создания с помощью двух вызовов remote-модуля -> двух ВМ, относящихся к разным проектам(marketing и analytics) используйте labels для обозначения принадлежности.  В файле cloud-init.yml необходимо использовать переменную для ssh-ключа вместо хардкода. Передайте ssh-ключ в функцию template_file в блоке vars ={} .
 Воспользуйтесь [**примером**](https://oneuptime.com/blog/post/2026-03-02-how-to-use-cloud-init-with-terraform-for-ubuntu-provisioning/view). Обратите внимание, что ssh-authorized-keys принимает в себя список, а не строку.
 3. Добавьте в файл cloud-init.yml установку nginx.
@@ -29,6 +29,405 @@
 ------
 В случае использования MacOS вы получите ошибку "Incompatible provider version" . В этом случае скачайте remote модуль локально и поправьте в нем версию template провайдера на более старую.
 ------
+
+**Решение:**  
+Скриншоты:  
+`Terraform/04/Screenshots/Task1 - module.marketing 2026-11-10 19-35-53.png`  
+`Terraform/04/Screenshots/Task1 - nginx installed 2026-11-10 19-32-49.png`  
+`Terraform/04/Screenshots/Task1 - VMs created 2026-11-10 19-33-20.png`  
+
+<details>
+  <summary>Вывод консоли terraform</summary>
+
+```bash
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ ssh-add ~/.ssh/vagrant
+Identity added: /home/ijin/.ssh/vagrant (ijin@tatuin)
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ ssh ubuntu@84.201.159.93
+Welcome to Ubuntu 20.04.6 LTS (GNU/Linux 5.4.0-216-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Tue Nov 10 17:31:31 UTC 2026
+
+  System load:  1.58              Processes:             116
+  Usage of /:   16.6% of 9.04GB   Users logged in:       0
+  Memory usage: 28%               IPv4 address for eth0: 10.0.1.16
+  Swap usage:   0%
+
+
+Expanded Security Maintenance for Infrastructure is not enabled.
+
+0 updates can be applied immediately.
+
+171 additional security updates can be applied with ESM Infra.
+Learn more about enabling ESM Infra service for Ubuntu 20.04 at
+https://ubuntu.com/20-04
+
+New release '22.04.5 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+
+
+Last login: Tue Nov 10 17:32:08 2026 from 188.128.41.89
+ubuntu@analytics-slot-0:~$ sudo nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+ubuntu@analytics-slot-0:~$ logout
+Connection to 84.201.159.93 closed.
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform console
+> module.marketing
+{
+  "all" = [
+    {
+      "allow_recreate" = tobool(null)
+      "allow_stopping_for_update" = true
+      "boot_disk" = tolist([
+        {
+          "auto_delete" = true
+          "device_name" = "fhmj8079jdlma4aprsf9"
+          "disk_id" = "fhmj8079jdlma4aprsf9"
+          "initialize_params" = tolist([
+            {
+              "block_size" = 4096
+              "description" = ""
+              "image_id" = "fd84np9sg3hrgaoisfnj"
+              "kms_key_id" = ""
+              "name" = ""
+              "size" = 10
+              "snapshot_id" = ""
+              "type" = "network-hdd"
+            },
+          ])
+          "mode" = "READ_WRITE"
+        },
+      ])
+      "created_at" = "2026-11-10T17:30:04Z"
+      "description" = "TODO: description; {{terraform yyy managed}}"
+      "filesystem" = toset([])
+      "folder_id" = "b1gl6j5lv636j3ekvebc"
+      "fqdn" = "marketing-slot-0.ru-central1.internal"
+      "gpu_cluster_id" = ""
+      "hardware_generation" = tolist([
+        {
+          "generation2_features" = tolist([])
+          "legacy_features" = tolist([
+            {
+              "pci_topology" = "PCI_TOPOLOGY_V2"
+            },
+          ])
+        },
+      ])
+      "hostname" = "marketing-slot-0"
+      "id" = "fhmai482ppbgq6n83ds6"
+      "labels" = tomap({
+        "owner" = "i.ivanov"
+        "project" = "accounting"
+      })
+      "local_disk" = tolist([])
+      "maintenance_grace_period" = ""
+      "maintenance_policy" = tostring(null)
+      "metadata" = tomap({
+        "serial-port-enable" = "1"
+        "user-data" = <<-EOT
+        #cloud-config
+        users:
+          - name: ubuntu
+            groups: sudo
+            shell: /bin/bash
+            sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+            ssh_authorized_keys:
+              - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOPO/4xISFqSWTA70WFZm32XccKUnkcOtQFyAkremnt7 ijin@tatuin
+        package_update: true
+        package_upgrade: false
+        packages:
+          - vim
+          - nginx
+          - mc
+          - curl
+          - wget
+        EOT
+      })
+      "metadata_options" = tolist([
+        {
+          "aws_v1_http_endpoint" = 1
+          "aws_v1_http_token" = 2
+          "aws_v2_http_endpoint" = 1
+          "aws_v2_http_token" = 1
+          "gce_http_endpoint" = 1
+          "gce_http_token" = 1
+        },
+      ])
+      "name" = "marketing-slot-0"
+      "network_acceleration_type" = "standard"
+      "network_interface" = tolist([
+        {
+          "dns_record" = tolist([])
+          "index" = 0
+          "ip_address" = "10.0.1.8"
+          "ipv4" = true
+          "ipv6" = false
+          "ipv6_address" = ""
+          "ipv6_dns_record" = tolist([])
+          "mac_address" = "d0:0d:a9:11:02:ce"
+          "nat" = true
+          "nat_dns_record" = tolist([])
+          "nat_ip_address" = "51.250.73.137"
+          "nat_ip_version" = "IPV4"
+          "security_group_ids" = toset(null) /* of string */
+          "subnet_id" = "e9b8rjk6lpa69vsao0ht"
+        },
+      ])
+      "placement_policy" = tolist([
+        {
+          "host_affinity_rules" = tolist([])
+          "placement_group_id" = ""
+          "placement_group_partition" = 0
+        },
+      ])
+      "platform_id" = "standard-v1"
+      "reserved_instance_pool_id" = ""
+      "resources" = tolist([
+        {
+          "core_fraction" = 5
+          "cores" = 2
+          "gpus" = 0
+          "memory" = 1
+        },
+      ])
+      "scheduling_policy" = tolist([
+        {
+          "preemptible" = true
+        },
+      ])
+      "secondary_disk" = toset([])
+      "service_account_id" = ""
+      "status" = "running"
+      "timeouts" = null /* object */
+      "zone" = "ru-central1-a"
+    },
+  ]
+  "external_ip_address" = [
+    "51.250.73.137",
+  ]
+  "fqdn" = [
+    "marketing-slot-0.ru-central1.internal",
+  ]
+  "internal_ip_address" = [
+    "10.0.1.8",
+  ]
+  "labels" = [
+    tomap({
+      "owner" = "i.ivanov"
+      "project" = "accounting"
+    }),
+  ]
+  "network_interface" = [
+    tolist([
+      {
+        "dns_record" = tolist([])
+        "index" = 0
+        "ip_address" = "10.0.1.8"
+        "ipv4" = true
+        "ipv6" = false
+        "ipv6_address" = ""
+        "ipv6_dns_record" = tolist([])
+        "mac_address" = "d0:0d:a9:11:02:ce"
+        "nat" = true
+        "nat_dns_record" = tolist([])
+        "nat_ip_address" = "51.250.73.137"
+        "nat_ip_version" = "IPV4"
+        "security_group_ids" = toset(null) /* of string */
+        "subnet_id" = "e9b8rjk6lpa69vsao0ht"
+      },
+    ]),
+  ]
+}
+> module.analytics
+{
+  "all" = [
+    {
+      "allow_recreate" = tobool(null)
+      "allow_stopping_for_update" = true
+      "boot_disk" = tolist([
+        {
+          "auto_delete" = true
+          "device_name" = "fhmerhjgtdu6jsg6a7sp"
+          "disk_id" = "fhmerhjgtdu6jsg6a7sp"
+          "initialize_params" = tolist([
+            {
+              "block_size" = 4096
+              "description" = ""
+              "image_id" = "fd84np9sg3hrgaoisfnj"
+              "kms_key_id" = ""
+              "name" = ""
+              "size" = 10
+              "snapshot_id" = ""
+              "type" = "network-hdd"
+            },
+          ])
+          "mode" = "READ_WRITE"
+        },
+      ])
+      "created_at" = "2026-11-10T17:30:04Z"
+      "description" = "TODO: description; {{terraform yyy managed}}"
+      "filesystem" = toset([])
+      "folder_id" = "b1gl6j5lv636j3ekvebc"
+      "fqdn" = "analytics-slot-0.ru-central1.internal"
+      "gpu_cluster_id" = ""
+      "hardware_generation" = tolist([
+        {
+          "generation2_features" = tolist([])
+          "legacy_features" = tolist([
+            {
+              "pci_topology" = "PCI_TOPOLOGY_V2"
+            },
+          ])
+        },
+      ])
+      "hostname" = "analytics-slot-0"
+      "id" = "fhmomsogr584o97684ro"
+      "labels" = tomap({
+        "a" = "b"
+        "c" = "d"
+        "e" = "f"
+        "env" = "analytics"
+        "g" = "h"
+        "project" = "undefined"
+        "q" = "w"
+      })
+      "local_disk" = tolist([])
+      "maintenance_grace_period" = ""
+      "maintenance_policy" = tostring(null)
+      "metadata" = tomap({
+        "serial-port-enable" = "1"
+        "user-data" = <<-EOT
+        #cloud-config
+        users:
+          - name: ubuntu
+            groups: sudo
+            shell: /bin/bash
+            sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+            ssh_authorized_keys:
+              - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOPO/4xISFqSWTA70WFZm32XccKUnkcOtQFyAkremnt7 ijin@tatuin
+        package_update: true
+        package_upgrade: false
+        packages:
+          - vim
+          - nginx
+          - mc
+          - curl
+          - wget
+        EOT
+      })
+      "metadata_options" = tolist([
+        {
+          "aws_v1_http_endpoint" = 1
+          "aws_v1_http_token" = 2
+          "aws_v2_http_endpoint" = 1
+          "aws_v2_http_token" = 1
+          "gce_http_endpoint" = 1
+          "gce_http_token" = 1
+        },
+      ])
+      "name" = "analytics-slot-0"
+      "network_acceleration_type" = "standard"
+      "network_interface" = tolist([
+        {
+          "dns_record" = tolist([])
+          "index" = 0
+          "ip_address" = "10.0.1.16"
+          "ipv4" = true
+          "ipv6" = false
+          "ipv6_address" = ""
+          "ipv6_dns_record" = tolist([])
+          "mac_address" = "d0:0d:18:b7:31:0d"
+          "nat" = true
+          "nat_dns_record" = tolist([])
+          "nat_ip_address" = "84.201.159.93"
+          "nat_ip_version" = "IPV4"
+          "security_group_ids" = toset(null) /* of string */
+          "subnet_id" = "e9b8rjk6lpa69vsao0ht"
+        },
+      ])
+      "placement_policy" = tolist([
+        {
+          "host_affinity_rules" = tolist([])
+          "placement_group_id" = ""
+          "placement_group_partition" = 0
+        },
+      ])
+      "platform_id" = "standard-v1"
+      "reserved_instance_pool_id" = ""
+      "resources" = tolist([
+        {
+          "core_fraction" = 5
+          "cores" = 2
+          "gpus" = 0
+          "memory" = 1
+        },
+      ])
+      "scheduling_policy" = tolist([
+        {
+          "preemptible" = true
+        },
+      ])
+      "secondary_disk" = toset([])
+      "service_account_id" = ""
+      "status" = "running"
+      "timeouts" = null /* object */
+      "zone" = "ru-central1-a"
+    },
+  ]
+  "external_ip_address" = [
+    "84.201.159.93",
+  ]
+  "fqdn" = [
+    "analytics-slot-0.ru-central1.internal",
+  ]
+  "internal_ip_address" = [
+    "10.0.1.16",
+  ]
+  "labels" = [
+    tomap({
+      "a" = "b"
+      "c" = "d"
+      "e" = "f"
+      "env" = "analytics"
+      "g" = "h"
+      "project" = "undefined"
+      "q" = "w"
+    }),
+  ]
+  "network_interface" = [
+    tolist([
+      {
+        "dns_record" = tolist([])
+        "index" = 0
+        "ip_address" = "10.0.1.16"
+        "ipv4" = true
+        "ipv6" = false
+        "ipv6_address" = ""
+        "ipv6_dns_record" = tolist([])
+        "mac_address" = "d0:0d:18:b7:31:0d"
+        "nat" = true
+        "nat_dns_record" = tolist([])
+        "nat_ip_address" = "84.201.159.93"
+        "nat_ip_version" = "IPV4"
+        "security_group_ids" = toset(null) /* of string */
+        "subnet_id" = "e9b8rjk6lpa69vsao0ht"
+      },
+    ]),
+  ]
+}
+> ^C
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+```
+
+</details>
 
 ### Задание 2
 

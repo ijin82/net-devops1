@@ -55,3 +55,8 @@ variable "vm_db_name" {
 
 
 
+### my additions
+variable "ssh_key_my_vagrant" {
+  description = "My public SSH key for lessons"
+  type        = string
+}
