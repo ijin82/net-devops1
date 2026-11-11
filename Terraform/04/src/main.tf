@@ -105,3 +105,10 @@ module "vpc_dev" {
     { zone = "ru-central1-a", cidr = ["10.0.1.0/24"] },
   ]
 }
+
+## Задание 6*
+module "my_s3_bucket" {
+  source      = "git::https://github.com/terraform-yc-modules/terraform-yc-s3.git?ref=master"
+  bucket_name = "ijin82-storage-1gb"
+  max_size    = 1073731584 # 1024*1024*1024 - 10240 bytes = чуть меньше 1GB
+}

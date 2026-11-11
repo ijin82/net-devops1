@@ -30,15 +30,14 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
-| <a name="input_cidr"></a> [cidr](#input\_cidr) | cidr | `list(string)` | <pre>[<br/>  "10.0.1.0/24"<br/>]</pre> | no |
 | <a name="input_env_name"></a> [env\_name](#input\_env\_name) | Environment name | `string` | `"hello"` | no |
-| <a name="input_zone"></a> [zone](#input\_zone) | zone ID (string slug) | `string` | `"ru-central1-a"` | no |
+| <a name="input_params"></a> [params](#input\_params) | List with zone ID (string slug) and cidr list(string) objects | <pre>list(object({<br/>    zone = string<br/>    cidr = list(string)<br/>  }))</pre> | <pre>[<br/>  {<br/>    "cidr": [<br/>      "10.0.1.0/24"<br/>    ],<br/>    "zone": "ru-central1-a"<br/>  }<br/>]</pre> | no |
 
 ## Outputs
 
 | Name | Description |
 | ---- | ----------- |
 | <a name="output_network_id"></a> [network\_id](#output\_network\_id) | n/a |
-| <a name="output_subnetwork_id"></a> [subnetwork\_id](#output\_subnetwork\_id) | n/a |
+| <a name="output_subnetwork_ids"></a> [subnetwork\_ids](#output\_subnetwork\_ids) | n/a |
 <!-- END_TF_DOCS -->
 

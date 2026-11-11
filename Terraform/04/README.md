@@ -1076,6 +1076,10 @@ $
 
 </details>
 
+Скриншоты:  
+`Terraform/04/Screenshots/Task4 - networks 2026-11-11 17-18-35.png`  
+`Terraform/04/Screenshots/Task4 - subnetworks 2026-11-11 17-19-00.png`  
+
 ### Задание 5*
 
 1. Напишите модуль для создания кластера managed БД Mysql в Yandex Cloud с одним или несколькими(2 по умолчанию) хостами в зависимости от переменной HA=true или HA=false. Используйте ресурс yandex_mdb_mysql_cluster: передайте имя кластера и id сети.
@@ -1086,6 +1090,82 @@ $
 ### Задание 6*
 1. Используя готовый yandex cloud terraform module и пример его вызова(examples/simple-bucket): https://github.com/terraform-yc-modules/terraform-yc-s3 .
 Создайте и не удаляйте для себя s3 бакет размером 1 ГБ(это бесплатно), он пригодится вам в ДЗ к 5 лекции.
+
+**Решение:**  
+Код: `Terraform/04/src/main.tf:109`
+
+```bash
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ yc iam access-key create --service-account-name terraform-ijin
+access_key:
+  id: secret
+  service_account_id: secret
+  created_at: "2026-11-11T15:56:57.363149299Z"
+  key_id: secret
+secret: secret
+
+export AWS_ACCESS_KEY_ID="secret"
+export AWS_SECRET_ACCESS_KEY="secret"
+
+terraform apply
+
+# ...
+# ... 
+
+module.marketing.yandex_compute_instance.vm[0]: Still creating... [00m40s elapsed]
+module.marketing.yandex_compute_instance.vm[0]: Creation complete after 41s [id=fhmr2d6v1btvnpmloaq8]
+
+Apply complete! Resources: 11 added, 0 changed, 0 destroyed.
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform state list
+data.template_file.cloudinit
+module.analytics.data.yandex_compute_image.my_image
+module.analytics.yandex_compute_instance.vm[0]
+module.marketing.data.yandex_compute_image.my_image
+module.marketing.yandex_compute_instance.vm[0]
+module.module_one.yandex_vpc_network.network_one
+module.module_one.yandex_vpc_subnet.subnetwork_one
+module.my_s3_bucket.data.yandex_client_config.client
+module.my_s3_bucket.random_string.unique_id
+module.my_s3_bucket.yandex_storage_bucket.this
+module.vpc_dev.yandex_vpc_network.network_one
+module.vpc_dev.yandex_vpc_subnet.subnetwork_one["ru-central1-a"]
+module.vpc_prod.yandex_vpc_network.network_one
+module.vpc_prod.yandex_vpc_subnet.subnetwork_one["ru-central1-a"]
+module.vpc_prod.yandex_vpc_subnet.subnetwork_one["ru-central1-d"]
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform state rm module.my_s3_bucket.data.yandex_client_config.client
+Removed module.my_s3_bucket.data.yandex_client_config.client
+Successfully removed 1 resource instance(s).
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform state rm module.my_s3_bucket.random_string.unique_id
+Removed module.my_s3_bucket.random_string.unique_id
+Successfully removed 1 resource instance(s).
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform state rm module.my_s3_bucket.yandex_storage_bucket.this
+Removed module.my_s3_bucket.yandex_storage_bucket.this
+Successfully removed 1 resource instance(s).
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform state list
+data.template_file.cloudinit
+module.analytics.data.yandex_compute_image.my_image
+module.analytics.yandex_compute_instance.vm[0]
+module.marketing.data.yandex_compute_image.my_image
+module.marketing.yandex_compute_instance.vm[0]
+module.module_one.yandex_vpc_network.network_one
+module.module_one.yandex_vpc_subnet.subnetwork_one
+module.vpc_dev.yandex_vpc_network.network_one
+module.vpc_dev.yandex_vpc_subnet.subnetwork_one["ru-central1-a"]
+module.vpc_prod.yandex_vpc_network.network_one
+module.vpc_prod.yandex_vpc_subnet.subnetwork_one["ru-central1-a"]
+module.vpc_prod.yandex_vpc_subnet.subnetwork_one["ru-central1-d"]
+```
+
+Скриншот: `Terraform/04/Screenshots/Task6 - storage 2026-11-11 18-11-45.png`
 
 ### Задание 7*
 
