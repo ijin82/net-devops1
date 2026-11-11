@@ -475,10 +475,260 @@ terraform-docs markdown --output-file README.md --output-mode inject .
 
 ### Задание 3
 1. Выведите список ресурсов в стейте.
+
+```bash
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform state list
+data.template_file.cloudinit
+module.analytics.data.yandex_compute_image.my_image
+module.analytics.yandex_compute_instance.vm[0]
+module.marketing.data.yandex_compute_image.my_image
+module.marketing.yandex_compute_instance.vm[0]
+module.module_one.yandex_vpc_network.network_one
+module.module_one.yandex_vpc_subnet.subnetwork_one
+```
+
 2. Полностью удалите из стейта модуль vpc.
+
+```bash
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform state rm module.module_one.yandex_vpc_network.network_one
+Removed module.module_one.yandex_vpc_network.network_one
+Successfully removed 1 resource instance(s).
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform state rm module.module_one.yandex_vpc_subnet.subnetwork_one
+Removed module.module_one.yandex_vpc_subnet.subnetwork_one
+Successfully removed 1 resource instance(s).
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform state list
+data.template_file.cloudinit
+module.analytics.data.yandex_compute_image.my_image
+module.analytics.yandex_compute_instance.vm[0]
+module.marketing.data.yandex_compute_image.my_image
+module.marketing.yandex_compute_instance.vm[0]
+```
+
 3. Полностью удалите из стейта модуль vm.
+
+```bash
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform state rm module.analytics.data.yandex_compute_image.my_image module.analytics.yandex_compute_instance.vm[0] module.marketing.data.yandex_compute_image.my_image module.marketing.yandex_compute_instance.vm[0]
+Removed module.analytics.data.yandex_compute_image.my_image
+Removed module.analytics.yandex_compute_instance.vm[0]
+Removed module.marketing.data.yandex_compute_image.my_image
+Removed module.marketing.yandex_compute_instance.vm[0]
+Successfully removed 4 resource instance(s).
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform state list
+data.template_file.cloudinit
+```
+
 4. Импортируйте всё обратно. Проверьте terraform plan. Значимых(!!) изменений быть не должно.
-Приложите список выполненных команд и скриншоты процессы.
+Приложите список выполненных команд и скриншоты процессы.  
+
+Получаем идентификаторы:  
+
+```bash
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ yc vpc network list
++----------------------+------------------+
+|          ID          |       NAME       |
++----------------------+------------------+
+| enp40k72n4s51vosvblq | prod-one-network |
+| enpo3crs5rplj6revi7l | default          |
++----------------------+------------------+
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ yc vpc subnet list
++----------------------+-----------------------+----------------------+----------------+---------------+-----------------+
+|          ID          |         NAME          |      NETWORK ID      | ROUTE TABLE ID |     ZONE      |      RANGE      |
++----------------------+-----------------------+----------------------+----------------+---------------+-----------------+
+| ajccgh13ogjch23uhsiq | default-ru-central1-e | enpo3crs5rplj6revi7l |                | ru-central1-e | [10.131.0.0/24] |
+| e2l6ctki7qeev90ustih | default-ru-central1-b | enpo3crs5rplj6revi7l |                | ru-central1-b | [10.129.0.0/24] |
+| e9bhctbm0ll6u0e5356a | prod-one-subnetwork   | enp40k72n4s51vosvblq |                | ru-central1-a | [10.0.1.0/24]   |
+| e9bucnd2o6qtgltlsjhv | default-ru-central1-a | enpo3crs5rplj6revi7l |                | ru-central1-a | [10.128.0.0/24] |
+| fl8vc7230aibhuvqincn | default-ru-central1-d | enpo3crs5rplj6revi7l |                | ru-central1-d | [10.130.0.0/24] |
++----------------------+-----------------------+----------------------+----------------+---------------+-----------------+
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ yc vpc compute instance list
+ERROR: execute command: Unknown command 'compute instance list'
+See 'yc vpc -h' for help and examples.
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ yc compute instance list
++----------------------+------------------+---------------+---------+----------------+-------------+
+|          ID          |       NAME       |    ZONE ID    | STATUS  |  EXTERNAL IP   | INTERNAL IP |
++----------------------+------------------+---------------+---------+----------------+-------------+
+| fhmdrcgfgnvq99i34ufv | analytics-slot-0 | ru-central1-a | RUNNING | 84.201.172.117 | 10.0.1.34   |
+| fhmlogp84o5gupm3t03t | marketing-slot-0 | ru-central1-a | RUNNING | 51.250.75.156  | 10.0.1.33   |
++----------------------+------------------+---------------+---------+----------------+-------------+
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ yc compute image list
++----+------+--------+-------------+--------+
+| ID | NAME | FAMILY | PRODUCT IDS | STATUS |
++----+------+--------+-------------+--------+
++----+------+--------+-------------+--------+
+```
+
+Имиджей нет почему-то..  
+Импорт ресурсов с идентификаторами:  
+
+```bash
+
+# Удалял в 1 итерации:
+# Removed module.module_one.yandex_vpc_network.network_one
+# Removed module.module_one.yandex_vpc_subnet.subnetwork_one
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform import module.module_one.yandex_vpc_network.network_one enp40k72n4s51vosvblq
+data.template_file.cloudinit: Reading...
+data.template_file.cloudinit: Read complete after 0s [id=561ec0ca826db627107409222f0cafa0e1ab04b9a6ec63debe36524c27813752]
+module.module_one.yandex_vpc_network.network_one: Importing from ID "enp40k72n4s51vosvblq"...
+module.analytics.data.yandex_compute_image.my_image: Reading...
+module.marketing.data.yandex_compute_image.my_image: Reading...
+module.module_one.yandex_vpc_network.network_one: Import prepared!
+  Prepared yandex_vpc_network for import
+module.module_one.yandex_vpc_network.network_one: Refreshing state... [id=enp40k72n4s51vosvblq]
+module.marketing.data.yandex_compute_image.my_image: Read complete after 2s [id=fd84np9sg3hrgaoisfnj]
+module.analytics.data.yandex_compute_image.my_image: Read complete after 2s [id=fd84np9sg3hrgaoisfnj]
+
+Import successful!
+
+The resources that were imported are shown above. These resources are now in
+your Terraform state and will henceforth be managed by Terraform.
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform import module.module_one.yandex_vpc_subnet.subnetwork_one e9bhctbm0ll6u0e5356a
+data.template_file.cloudinit: Reading...
+data.template_file.cloudinit: Read complete after 0s [id=561ec0ca826db627107409222f0cafa0e1ab04b9a6ec63debe36524c27813752]
+module.marketing.data.yandex_compute_image.my_image: Reading...
+module.analytics.data.yandex_compute_image.my_image: Reading...
+module.module_one.yandex_vpc_subnet.subnetwork_one: Importing from ID "e9bhctbm0ll6u0e5356a"...
+module.module_one.yandex_vpc_subnet.subnetwork_one: Import prepared!
+  Prepared yandex_vpc_subnet for import
+module.module_one.yandex_vpc_subnet.subnetwork_one: Refreshing state... [id=e9bhctbm0ll6u0e5356a]
+module.analytics.data.yandex_compute_image.my_image: Read complete after 2s [id=fd84np9sg3hrgaoisfnj]
+module.marketing.data.yandex_compute_image.my_image: Read complete after 2s [id=fd84np9sg3hrgaoisfnj]
+
+Import successful!
+
+The resources that were imported are shown above. These resources are now in
+your Terraform state and will henceforth be managed by Terraform.
+
+
+# Удалял во 2й итерации
+# Removed module.analytics.data.yandex_compute_image.my_image
+# Removed module.analytics.yandex_compute_instance.vm[0]
+# Removed module.marketing.data.yandex_compute_image.my_image
+# Removed module.marketing.yandex_compute_instance.vm[0]
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform import module.analytics.yandex_compute_instance.vm[0] fhmdrcgfgnvq99i34ufv
+data.template_file.cloudinit: Reading...
+data.template_file.cloudinit: Read complete after 0s [id=561ec0ca826db627107409222f0cafa0e1ab04b9a6ec63debe36524c27813752]
+module.marketing.data.yandex_compute_image.my_image: Reading...
+module.analytics.data.yandex_compute_image.my_image: Reading...
+module.marketing.data.yandex_compute_image.my_image: Read complete after 2s [id=fd84np9sg3hrgaoisfnj]
+module.analytics.data.yandex_compute_image.my_image: Read complete after 2s [id=fd84np9sg3hrgaoisfnj]
+module.analytics.yandex_compute_instance.vm[0]: Importing from ID "fhmdrcgfgnvq99i34ufv"...
+module.analytics.yandex_compute_instance.vm[0]: Import prepared!
+  Prepared yandex_compute_instance for import
+module.analytics.yandex_compute_instance.vm[0]: Refreshing state... [id=fhmdrcgfgnvq99i34ufv]
+
+Import successful!
+
+The resources that were imported are shown above. These resources are now in
+your Terraform state and will henceforth be managed by Terraform.
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform import module.marketing.yandex_compute_instance.vm[0] fhmlogp84o5gupm3t03t
+data.template_file.cloudinit: Reading...
+data.template_file.cloudinit: Read complete after 0s [id=561ec0ca826db627107409222f0cafa0e1ab04b9a6ec63debe36524c27813752]
+module.analytics.data.yandex_compute_image.my_image: Reading...
+module.marketing.data.yandex_compute_image.my_image: Reading...
+module.analytics.data.yandex_compute_image.my_image: Read complete after 2s [id=fd84np9sg3hrgaoisfnj]
+module.marketing.data.yandex_compute_image.my_image: Read complete after 2s [id=fd84np9sg3hrgaoisfnj]
+module.marketing.yandex_compute_instance.vm[0]: Importing from ID "fhmlogp84o5gupm3t03t"...
+module.marketing.yandex_compute_instance.vm[0]: Import prepared!
+  Prepared yandex_compute_instance for import
+module.marketing.yandex_compute_instance.vm[0]: Refreshing state... [id=fhmlogp84o5gupm3t03t]
+
+Import successful!
+
+The resources that were imported are shown above. These resources are now in
+your Terraform state and will henceforth be managed by Terraform.
+
+# А вот если бы у меня небыло списка удаленных ресурсов как бы я вычислял чего 
+# мне не хватает и кто есть кто в куче ресурсов на площадке???? 
+# То есть я бы смотрел в код и (если бы были) переменные с которыми он был выполнен
+# то мог бы вычислить каких ресурсов не хватает
+# Ответ: смотреть terraform plan на предмет ресурсов которые система будет пытаться создать.
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform state list
+data.template_file.cloudinit
+module.analytics.data.yandex_compute_image.my_image
+module.analytics.yandex_compute_instance.vm[0]
+module.marketing.data.yandex_compute_image.my_image
+module.marketing.yandex_compute_instance.vm[0]
+module.module_one.yandex_vpc_network.network_one
+module.module_one.yandex_vpc_subnet.subnetwork_one
+
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform plan
+data.template_file.cloudinit: Reading...
+data.template_file.cloudinit: Read complete after 0s [id=561ec0ca826db627107409222f0cafa0e1ab04b9a6ec63debe36524c27813752]
+module.marketing.data.yandex_compute_image.my_image: Reading...
+module.analytics.data.yandex_compute_image.my_image: Reading...
+module.module_one.yandex_vpc_network.network_one: Refreshing state... [id=enp40k72n4s51vosvblq]
+module.analytics.data.yandex_compute_image.my_image: Read complete after 2s [id=fd84np9sg3hrgaoisfnj]
+module.marketing.data.yandex_compute_image.my_image: Read complete after 2s [id=fd84np9sg3hrgaoisfnj]
+module.module_one.yandex_vpc_subnet.subnetwork_one: Refreshing state... [id=e9bhctbm0ll6u0e5356a]
+module.marketing.yandex_compute_instance.vm[0]: Refreshing state... [id=fhmlogp84o5gupm3t03t]
+module.analytics.yandex_compute_instance.vm[0]: Refreshing state... [id=fhmdrcgfgnvq99i34ufv]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following
+symbols:
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # module.analytics.yandex_compute_instance.vm[0] will be updated in-place
+  ~ resource "yandex_compute_instance" "vm" {
+      + allow_stopping_for_update = true
+        id                        = "fhmdrcgfgnvq99i34ufv"
+        name                      = "analytics-slot-0"
+        # (16 unchanged attributes hidden)
+
+        # (6 unchanged blocks hidden)
+    }
+
+  # module.marketing.yandex_compute_instance.vm[0] will be updated in-place
+  ~ resource "yandex_compute_instance" "vm" {
+      + allow_stopping_for_update = true
+        id                        = "fhmlogp84o5gupm3t03t"
+        name                      = "marketing-slot-0"
+        # (16 unchanged attributes hidden)
+
+        # (6 unchanged blocks hidden)
+    }
+
+Plan: 0 to add, 2 to change, 0 to destroy.
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform
+apply" now.
+```
+
+Скриншоты:  
+`Terraform/04/Screenshots/Task3 - IDs1 2026-11-11 13-43-41.png`  
+`Terraform/04/Screenshots/Task3 - IDs2 2026-11-11 13-43-51.png`  
+`Terraform/04/Screenshots/Task3 - import 2026-11-11 13-52-43.png`  
 
 ## Дополнительные задания (со звёздочкой*)
 
