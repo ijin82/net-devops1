@@ -662,7 +662,7 @@ Import successful!
 The resources that were imported are shown above. These resources are now in
 your Terraform state and will henceforth be managed by Terraform.
 
-# А вот если бы у меня небыло списка удаленных ресурсов как бы я вычислял чего 
+# А вот если бы у меня не было списка удаленных ресурсов как бы я вычислял чего 
 # мне не хватает и кто есть кто в куче ресурсов на площадке???? 
 # То есть я бы смотрел в код и (если бы были) переменные с которыми он был выполнен
 # то мог бы вычислить каких ресурсов не хватает
