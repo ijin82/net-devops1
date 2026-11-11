@@ -41,6 +41,7 @@ module "marketing" {
   labels = { 
     owner= "i.ivanov",
     project = "accounting"
+    department = "marketing"
   }
 
   metadata = {
@@ -70,6 +71,12 @@ module "analytics" {
   instance_count = 1
   image_family   = "ubuntu-2004-lts"
   public_ip      = true
+  
+  labels = { 
+    owner= "i.petrov",
+    project = "collecting"
+    department = "analytics"
+  }
 
   metadata = {
     user-data          = data.template_file.cloudinit.rendered # Для демонстрации №3
@@ -107,8 +114,8 @@ module "vpc_dev" {
 }
 
 ## Задание 6*
-module "my_s3_bucket" {
-  source      = "git::https://github.com/terraform-yc-modules/terraform-yc-s3.git?ref=master"
-  bucket_name = "ijin82-storage-1gb"
-  max_size    = 1073731584 # 1024*1024*1024 - 10240 bytes = чуть меньше 1GB
-}
+#module "my_s3_bucket" {
+#  source      = "git::https://github.com/terraform-yc-modules/terraform-yc-s3.git?ref=master"
+#  bucket_name = "ijin82-storage-1gb"
+#  max_size    = 1073731584 # 1024*1024*1024 - 10240 bytes = чуть меньше 1GB
+#}
