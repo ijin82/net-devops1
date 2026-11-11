@@ -87,3 +87,21 @@ data "template_file" "cloudinit" {
   template = file("./cloud-init.yml")
 }
 
+
+## Задание 4*
+module "vpc_prod" {
+  source       = "./module_two"
+  env_name     = "production"
+  params = [
+    { zone = "ru-central1-a", cidr = ["10.0.1.0/24"] },
+    { zone = "ru-central1-d", cidr = ["10.0.3.0/24"] },
+  ]
+}
+
+module "vpc_dev" {
+  source       = "./module_two"
+  env_name     = "develop"
+  params = [
+    { zone = "ru-central1-a", cidr = ["10.0.1.0/24"] },
+  ]
+}

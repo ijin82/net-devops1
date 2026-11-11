@@ -763,6 +763,319 @@ module "vpc_dev" {
 
 Предоставьте код, план выполнения, результат из консоли YC.
 
+**Решение:**  
+Код: `Terraform/04/src/main.tf:91`
+Модуль: `Terraform/04/src/module_two/main.tf`
+
+<details>
+  <summary>Вывод terraform plan</summary>
+
+```bash
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform plan
+data.template_file.cloudinit: Reading...
+data.template_file.cloudinit: Read complete after 0s [id=561ec0ca826db627107409222f0cafa0e1ab04b9a6ec63debe36524c27813752]
+module.marketing.data.yandex_compute_image.my_image: Reading...
+module.analytics.data.yandex_compute_image.my_image: Reading...
+module.analytics.data.yandex_compute_image.my_image: Read complete after 2s [id=fd84np9sg3hrgaoisfnj]
+module.marketing.data.yandex_compute_image.my_image: Read complete after 2s [id=fd84np9sg3hrgaoisfnj]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following
+symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.analytics.yandex_compute_instance.vm[0] will be created
+  + resource "yandex_compute_instance" "vm" {
+      + allow_stopping_for_update = true
+      + created_at                = (known after apply)
+      + description               = "TODO: description; {{terraform yyy managed}}"
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = "analytics-slot-0"
+      + id                        = (known after apply)
+      + labels                    = {
+          + "a"       = "b"
+          + "c"       = "d"
+          + "e"       = "f"
+          + "env"     = "analytics"
+          + "g"       = "h"
+          + "project" = "undefined"
+          + "q"       = "w"
+        }
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "serial-port-enable" = "1"
+          + "user-data"          = <<-EOT
+                #cloud-config
+                users:
+                  - name: ubuntu
+                    groups: sudo
+                    shell: /bin/bash
+                    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+                    ssh_authorized_keys:
+                      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOPO/4xISFqSWTA70WFZm32XccKUnkcOtQFyAkremnt7 ijin@tatuin
+                package_update: true
+                package_upgrade: false
+                packages:
+                  - vim
+                  - nginx
+                  - mc
+                  - curl
+                  - wget
+            EOT
+        }
+      + name                      = "analytics-slot-0"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v1"
+      + reserved_instance_pool_id = (known after apply)
+      + status                    = (known after apply)
+      + zone                      = "ru-central1-a"
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd84np9sg3hrgaoisfnj"
+              + name        = (known after apply)
+              + size        = 10
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index          = (known after apply)
+          + ip_address     = (known after apply)
+          + ipv4           = true
+          + ipv6           = (known after apply)
+          + ipv6_address   = (known after apply)
+          + mac_address    = (known after apply)
+          + nat            = true
+          + nat_ip_address = (known after apply)
+          + nat_ip_version = (known after apply)
+          + subnet_id      = (known after apply)
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 5
+          + cores         = 2
+          + memory        = 1
+        }
+
+      + scheduling_policy {
+          + preemptible = true
+        }
+    }
+
+  # module.marketing.yandex_compute_instance.vm[0] will be created
+  + resource "yandex_compute_instance" "vm" {
+      + allow_stopping_for_update = true
+      + created_at                = (known after apply)
+      + description               = "TODO: description; {{terraform yyy managed}}"
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = "marketing-slot-0"
+      + id                        = (known after apply)
+      + labels                    = {
+          + "owner"   = "i.ivanov"
+          + "project" = "accounting"
+        }
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "serial-port-enable" = "1"
+          + "user-data"          = <<-EOT
+                #cloud-config
+                users:
+                  - name: ubuntu
+                    groups: sudo
+                    shell: /bin/bash
+                    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+                    ssh_authorized_keys:
+                      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOPO/4xISFqSWTA70WFZm32XccKUnkcOtQFyAkremnt7 ijin@tatuin
+                package_update: true
+                package_upgrade: false
+                packages:
+                  - vim
+                  - nginx
+                  - mc
+                  - curl
+                  - wget
+            EOT
+        }
+      + name                      = "marketing-slot-0"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v1"
+      + reserved_instance_pool_id = (known after apply)
+      + status                    = (known after apply)
+      + zone                      = "ru-central1-a"
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd84np9sg3hrgaoisfnj"
+              + name        = (known after apply)
+              + size        = 10
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index          = (known after apply)
+          + ip_address     = (known after apply)
+          + ipv4           = true
+          + ipv6           = (known after apply)
+          + ipv6_address   = (known after apply)
+          + mac_address    = (known after apply)
+          + nat            = true
+          + nat_ip_address = (known after apply)
+          + nat_ip_version = (known after apply)
+          + subnet_id      = (known after apply)
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 5
+          + cores         = 2
+          + memory        = 1
+        }
+
+      + scheduling_policy {
+          + preemptible = true
+        }
+    }
+
+  # module.module_one.yandex_vpc_network.network_one will be created
+  + resource "yandex_vpc_network" "network_one" {
+      + created_at                = (known after apply)
+      + default_security_group_id = (known after apply)
+      + folder_id                 = (known after apply)
+      + id                        = (known after apply)
+      + labels                    = (known after apply)
+      + name                      = "prod-one-network"
+      + subnet_ids                = (known after apply)
+    }
+
+  # module.module_one.yandex_vpc_subnet.subnetwork_one will be created
+  + resource "yandex_vpc_subnet" "subnetwork_one" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "prod-one-subnetwork"
+      + network_id     = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.0.1.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-a"
+    }
+
+  # module.vpc_dev.yandex_vpc_network.network_one will be created
+  + resource "yandex_vpc_network" "network_one" {
+      + created_at                = (known after apply)
+      + default_security_group_id = (known after apply)
+      + folder_id                 = (known after apply)
+      + id                        = (known after apply)
+      + labels                    = (known after apply)
+      + name                      = "develop-two-network"
+      + subnet_ids                = (known after apply)
+    }
+
+  # module.vpc_dev.yandex_vpc_subnet.subnetwork_one["ru-central1-a"] will be created
+  + resource "yandex_vpc_subnet" "subnetwork_one" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "develop-ru-central1-a-two-subnetwork"
+      + network_id     = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.0.1.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-a"
+    }
+
+  # module.vpc_prod.yandex_vpc_network.network_one will be created
+  + resource "yandex_vpc_network" "network_one" {
+      + created_at                = (known after apply)
+      + default_security_group_id = (known after apply)
+      + folder_id                 = (known after apply)
+      + id                        = (known after apply)
+      + labels                    = (known after apply)
+      + name                      = "production-two-network"
+      + subnet_ids                = (known after apply)
+    }
+
+  # module.vpc_prod.yandex_vpc_subnet.subnetwork_one["ru-central1-a"] will be created
+  + resource "yandex_vpc_subnet" "subnetwork_one" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "production-ru-central1-a-two-subnetwork"
+      + network_id     = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.0.1.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-a"
+    }
+
+  # module.vpc_prod.yandex_vpc_subnet.subnetwork_one["ru-central1-d"] will be created
+  + resource "yandex_vpc_subnet" "subnetwork_one" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "production-ru-central1-d-two-subnetwork"
+      + network_id     = (known after apply)
+      + v4_cidr_blocks = [
+          + "10.0.3.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-d"
+    }
+
+Plan: 9 to add, 0 to change, 0 to destroy.
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform
+apply" now.
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ 
+```
+
+</details>
+
 ### Задание 5*
 
 1. Напишите модуль для создания кластера managed БД Mysql в Yandex Cloud с одним или несколькими(2 по умолчанию) хостами в зависимости от переменной HA=true или HA=false. Используйте ресурс yandex_mdb_mysql_cluster: передайте имя кластера и id сети.
