@@ -1,3 +1,5 @@
-token  =  ""
-cloud_id  = ""
-folder_id = ""
+token  =  "t1.secret"
+cloud_id = "secret"
+folder_id = "secret"
+
+ssh_key_my_vagrant="ssh-ed25519 secret"

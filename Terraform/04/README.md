@@ -431,7 +431,7 @@ ijin@tatuin ~/Work/net-devops1/Terraform/04/src
 
 ### Задание 2
 
-1. Напишите локальный модуль vpc, который будет создавать 2 ресурса: **одну** сеть и **одну** подсеть в зоне, объявленной при вызове модуля, например: ```ru-central1-a```.
+1. Напишите локальный модуль vpc, который будет создавать 2 ресурса: **одну** сеть и **одну** подсеть в зоне, объявленной при вызове модуля, например: ```ru-central1-a```.  
 2. Вы должны передать в модуль переменные с названием сети, zone и v4_cidr_blocks.
 3. Модуль должен возвращать в root module с помощью output информацию о yandex_vpc_subnet. Пришлите скриншот информации из terraform console о своем модуле. Пример: > module.vpc_dev  
 4. Замените ресурсы yandex_vpc_network и yandex_vpc_subnet созданным модулем. Не забудьте передать необходимые параметры сети из модуля vpc в модуль с виртуальной машиной.
@@ -447,6 +447,31 @@ module "vpc_dev" {
   cidr = "10.0.1.0/24"
 }
 ```
+
+**Решение:**  
+Код: `./module_one`  
+Скриншоты:  
+`Terraform/04/Screenshots/Task2 - module output 2026-11-11 12-49-25.png`  
+`Terraform/04/Screenshots/Task2 - network ID YC 2026-11-11 12-50-45.png`  
+`Terraform/04/Screenshots/Task2 - subnet ID YC 2026-11-11 12-51-15.png`  
+`Terraform/04/Screenshots/Task2 - VM1 subnet 2026-11-11 12-51-59.png`  
+`Terraform/04/Screenshots/Task2 - VM2 subnet  2026-11-11 12-52-25.png`  
+Документация:  
+Поставил terraform-docs: `go install github.com/terraform-docs/terraform-docs@latest`
+
+```bash
+ijin@tatuin ~/Work/net-devops1/Terraform/04/src
+$ terraform-docs --version
+terraform-docs version v0.24.0 linux/amd64
+```
+
+Сгенерировал документацию:  
+
+```bash
+terraform-docs markdown --output-file README.md --output-mode inject .
+```
+
+Сгенерированная документация тут: `Terraform/04/src/module_one/README.md`
 
 ### Задание 3
 1. Выведите список ресурсов в стейте.
