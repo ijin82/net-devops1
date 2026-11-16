@@ -23,7 +23,7 @@
 2. Пожалуйста, распространите данную идею в своем коллективе.
 
 **РШЕНИЕ:**  
-Ок, он уже не работает
+Ок, но он уже не работает
 
 ------
 
@@ -101,10 +101,35 @@ CKV_TF_1 - 2шт, CKV_TF_2 - 2шт - **checkov**
      ```
    - Выполните `terraform init -migrate-state` для миграции state в S3
    - Предоставьте скриншоты процесса настройки и миграции
+
+**Решение:**
+
+Файл  доступом к бакету:  
+
+```bash
+ijin@alt 🛠️ git:terraform-05 ~/Work/net-devops1/Terraform/04/src
+$ cat ~/.aws/credentials 
+
+[default]
+aws_access_key_id = YCAJEa_SECRET
+aws_secret_access_key = YCPuk_SECRET
+```
+
 3. Закоммитьте в ветку 'terraform-05' все изменения.
 4. Откройте в проекте terraform console, а в другом окне из этой же директории попробуйте запустить terraform apply.
 5. Пришлите ответ об ошибке доступа к state (блокировка должна сработать автоматически).
+
+Скриншоты (**На ветке terraform-05**):  
+`Terraform/05/Screenshots/Task2 - console 2026-11-16 21-18-00.png`  
+`Terraform/05/Screenshots/Task2 - destroy 2026-11-16 21-19-13.png`  
+`Terraform/05/Screenshots/Task2 - block error 2026-11-16 21-23-50.png`  
+``  
+
 6. Принудительно разблокируйте state командой `terraform force-unlock <LOCK_ID>`. Пришлите команду и вывод.
+
+Скриншоты (**На ветке terraform-05**):  
+`Terraform/05/Screenshots/Task2 - force-unlock 2026-11-16 21-28-15.png`  
+`Terraform/05/Screenshots/Task2 - force-unlock2 2026-11-16 21-30-13.png`  
 
 **Примечание:** В Terraform >= 1.6 появился встроенный механизм блокировок через `use_lockfile = true`. 
 Это упрощает настройку - больше не нужно создавать отдельную базу данных (YDB в режиме DynamoDB) для хранения блокировок.
