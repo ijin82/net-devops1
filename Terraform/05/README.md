@@ -135,15 +135,36 @@ aws_secret_access_key = YCPuk_SECRET
 Это упрощает настройку - больше не нужно создавать отдельную базу данных (YDB в режиме DynamoDB) для хранения блокировок.
 Lock-файл создается автоматически в том же S3 bucket рядом с state-файлом с именем `<key>.lock.info`.
 
-
 ------
 ### Задание 3  
 
 1. Сделайте в GitHub из ветки 'terraform-05' новую ветку 'terraform-hotfix'.
+
+```bash
+ijin@alt 🛠️ git:master ~/Work/net-devops1/Terraform/04/src
+$ git checkout terraform-05 
+Switched to branch 'terraform-05'
+
+ijin@alt 🛠️ git:terraform-05 ~/Work/net-devops1/Terraform/04/src
+$ git checkout -b terraform-hotfix
+Switched to a new branch 'terraform-hotfix'
+```
+
 2. Проверье код с помощью tflint и checkov, исправьте все предупреждения и ошибки в 'terraform-hotfix', сделайте коммит.
 3. Откройте новый pull request 'terraform-hotfix' --> 'terraform-05'. 
 4. Вставьте в комментарий PR результат анализа tflint и checkov, план изменений инфраструктуры из вывода команды terraform plan.
 5. Пришлите ссылку на PR для ревью. Вливать код в 'terraform-05' не нужно.
+
+**Решение:**  
+После проверки ftlint и исправления его варнингов в checkov все failed сообщения исчезли, но не понятно сообщение о том что я должен использовать хэш, потому что я его и использую, не тег не main а именно хэш коммита, варнинги все равно сыпятся, но это не критичные уже варнинги как я понял.
+
+Файлы с проверками (на ветке terraform-hotfix):  
+`Terraform/05/test-tflint.txt`  
+`Terraform/05/test-checkov.txt`  
+`Terraform/05/test-checkov-after-tflint-fix.txt`  
+
+Pull request:  
+https://github.com/ijin82/net-devops1/pull/1
 
 ------
 ### Задание 4
