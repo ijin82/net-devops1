@@ -178,6 +178,7 @@ https://github.com/ijin82/net-devops1/pull/1
 Переменные: `Terraform/05/variables.tf`  
 Скриншоты:  
 `Terraform/05/Screenshots/Task4 - broken IP 2026-11-16 22-46-17.png`  
+`Terraform/05/Screenshots/Task4 - broken IPS 2026-11-16 23-20-32.png`  
 
 ## Дополнительные задания (со звёздочкой*)
 

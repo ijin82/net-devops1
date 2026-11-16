@@ -19,3 +19,20 @@ variable "my_ip" {
     # то есть лучше пользоваться cidrhost 
   }
 }
+
+variable "my_ips" {
+  type        = list(string)
+  description = "список ip-адресов"
+
+  # good
+  # default     = ["192.168.0.1", "1.1.1.1", "127.0.0.1"]
+  # bad
+   default     = ["192.168.0.1", "1.1.1.1", "1270.0.0.1"]
+
+  # https://developer.hashicorp.com/terraform/language/functions/alltrue
+  # то же самое что can только для листа, alltrue(list)
+  validation {
+    condition     = alltrue([for ip in var.my_ips : can(cidrhost("${ip}/32", 0))])
+    error_message = "Bad IP address."
+  }
+}
