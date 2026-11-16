@@ -2,15 +2,24 @@ terraform {
   required_version = "~>1.16.0"
 
   required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.72"
+    }
     yandex = {
-      source = "yandex-cloud/yandex"
+      source  = "yandex-cloud/yandex"
+      version = "~> 0.245"
+    }
+    template = {
+      source  = "hashicorp/template"
+      version = "~> 2.2"
     }
   }
 
   backend "s3" {
     
-    #shared_credentials_files = ["~/.aws/credentials"]
-    #profile                  = "default"
+    shared_credentials_files = ["~/.aws/credentials"]
+    profile                  = "default"
 
     bucket  = "ijin82-storage-1gb" # FIO-netology-tfstate
     key     = "terraform.tfstate"

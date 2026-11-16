@@ -18,7 +18,7 @@ module "module_one" {
 }
 
 module "marketing" {
-  source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
+  source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=0f41ce711a18cd1a0cb037f21ab3c4acc9257c88"
   env_name       = "marketing" 
 
   # было
@@ -52,7 +52,7 @@ module "marketing" {
 }
 
 module "analytics" {
-  source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
+  source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=0f41ce711a18cd1a0cb037f21ab3c4acc9257c88"
   env_name       = "analytics"
 
   # было
