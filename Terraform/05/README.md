@@ -52,18 +52,19 @@ ijin@tatuin 🛠️ git:main ~/Work/terraform-tasks-to-copy
 $ checkov -v
 3.4.5
 
-# run
+# run tflint
 docker run --rm -v $(pwd):/data -t ghcr.io/terraform-linters/tflint --recursive
-
+# run checkov
+checkov -d .
 ```
 
 Типы ошибок `Terraform/04/src`:  
-WARNING - 12шт - tflint (все типа warning)
-CKV_AWS_41 - 1шт, CKV_TF_1 - 2шт, CKV_TF_2 - 2шт - checkov  
+WARNING - 12шт - **tflint** (все типа warning)
+CKV_AWS_41 - 1шт, CKV_TF_1 - 2шт, CKV_TF_2 - 2шт - **checkov**  
 
 Типы ошибок `Terraform/04/demonstration1`:  
-WARNING - 6шт - tflint (все типа warning)
-CKV_TF_1 - 2шт, CKV_TF_2 - 2шт - checkov  
+WARNING - 6шт - **tflint** (все типа warning)
+CKV_TF_1 - 2шт, CKV_TF_2 - 2шт - **checkov**  
 
 ------
 
