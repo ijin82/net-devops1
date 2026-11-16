@@ -1,0 +1,40 @@
+ijin@alt 🛠️ git:terraform-hotfix ~/Work/net-devops1/Terraform/04/src
+$ checkov -d .
+[ kubernetes framework ]: 100%|████████████████████|[1/1], Current File Scanned=cloud-init.yml
+[ secrets framework ]:   0%|                    |[0/11]2026-11-16 22:01:15,820 [MainThread  ] [WARNI]  Failed to download module git::https://github.com/udjin10/yandex_compute_instance.git?ref=0f41ce711a18cd1a0cb037f21ab3c4acc9257c88 (for external modules, the --download-external-modules flag is required)
+[ secrets framework ]: 100%|████████████████████|[11/11], Current File Scanned=./module_two/main.tf    
+[ terraform framework ]: 100%|████████████████████|[12/12], Current File Scanned=variables.tf          
+[ ansible framework ]: 100%|████████████████████|[1/1], Current File Scanned=cloud-init.yml
+
+       _               _
+   ___| |__   ___  ___| | _______   __
+  / __| '_ \ / _ \/ __| |/ / _ \ \ / /
+ | (__| | | |  __/ (__|   < (_) \ V /
+  \___|_| |_|\___|\___|_|\_\___/ \_/
+
+By Prisma Cloud | version: 3.4.5 
+
+terraform scan results:
+
+Passed checks: 5, Failed checks: 0, Skipped checks: 0
+
+Check: CKV_TF_1: "Ensure Terraform module sources use a commit hash"
+	PASSED for resource: marketing
+	File: /main.tf:20-52
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/supply-chain-policies/terraform-policies/ensure-terraform-module-sources-use-git-url-with-commit-hash-revision
+Check: CKV_TF_2: "Ensure Terraform module sources use a tag with a version number"
+	PASSED for resource: marketing
+	File: /main.tf:20-52
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/supply-chain-policies/terraform-policies/ensure-terraform-module-sources-use-tag
+Check: CKV_TF_1: "Ensure Terraform module sources use a commit hash"
+	PASSED for resource: analytics
+	File: /main.tf:54-86
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/supply-chain-policies/terraform-policies/ensure-terraform-module-sources-use-git-url-with-commit-hash-revision
+Check: CKV_TF_2: "Ensure Terraform module sources use a tag with a version number"
+	PASSED for resource: analytics
+	File: /main.tf:54-86
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/supply-chain-policies/terraform-policies/ensure-terraform-module-sources-use-tag
+Check: CKV_AWS_41: "Ensure no hard coded AWS access key and secret key exists in provider"
+	PASSED for resource: aws.default
+	File: /providers.tf:52-56
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/secrets-policies/bc-aws-secrets-5

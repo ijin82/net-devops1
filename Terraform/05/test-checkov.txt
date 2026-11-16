@@ -1,0 +1,179 @@
+ijin@alt 🛠️ git:terraform-hotfix ~/Work/net-devops1/Terraform/04/src
+$ checkov -d .
+[ kubernetes framework ]: 100%|████████████████████|[1/1], Current File Scanned=cloud-init.yml
+[ secrets framework ]:   0%|                    |[0/11]2026-11-16 21:44:40,391 [MainThread  ] [WARNI]  Failed to download module git::https://github.com/udjin10/yandex_compute_instance.git?ref=main (for external modules, the --download-external-modules flag is required)
+[ secrets framework ]: 100%|████████████████████|[11/11], Current File Scanned=./module_two/main.tf    
+[ ansible framework ]: 100%|████████████████████|[1/1], Current File Scanned=cloud-init.yml
+[ terraform framework ]: 100%|████████████████████|[12/12], Current File Scanned=variables.tf          
+
+       _               _
+   ___| |__   ___  ___| | _______   __
+  / __| '_ \ / _ \/ __| |/ / _ \ \ / /
+ | (__| | | |  __/ (__|   < (_) \ V /
+  \___|_| |_|\___|\___|_|\_\___/ \_/
+
+By Prisma Cloud | version: 3.4.5 
+
+terraform scan results:
+
+Passed checks: 1, Failed checks: 4, Skipped checks: 0
+
+Check: CKV_AWS_41: "Ensure no hard coded AWS access key and secret key exists in provider"
+	PASSED for resource: aws.default
+	File: /providers.tf:43-47
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/secrets-policies/bc-aws-secrets-5
+Check: CKV_TF_1: "Ensure Terraform module sources use a commit hash"
+	FAILED for resource: marketing
+	File: /main.tf:20-52
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/supply-chain-policies/terraform-policies/ensure-terraform-module-sources-use-git-url-with-commit-hash-revision
+
+		20 | module "marketing" {
+		21 |   source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
+		22 |   env_name       = "marketing" 
+		23 | 
+		24 |   # было
+		25 |   # network_id     = yandex_vpc_network.develop.id
+		26 |   # стало
+		27 |   network_id     = module.module_one.subnetwork_id
+		28 | 
+		29 |   subnet_zones   = ["ru-central1-a","ru-central1-d"]
+		30 |   
+		31 |   # было
+		32 |   # subnet_ids     = [yandex_vpc_subnet.develop.id]
+		33 |   # стало
+		34 |   subnet_ids     = [module.module_one.subnetwork_id]
+		35 | 
+		36 |   instance_name  = "slot"
+		37 |   instance_count = 1
+		38 |   image_family   = "ubuntu-2004-lts"
+		39 |   public_ip      = true
+		40 | 
+		41 |   labels = { 
+		42 |     owner= "i.ivanov",
+		43 |     project = "accounting"
+		44 |     department = "marketing"
+		45 |   }
+		46 | 
+		47 |   metadata = {
+		48 |     user-data          = data.template_file.cloudinit.rendered # Для демонстрации №3
+		49 |     serial-port-enable = 1
+		50 |   }
+		51 | 
+		52 | }
+
+Check: CKV_TF_2: "Ensure Terraform module sources use a tag with a version number"
+	FAILED for resource: marketing
+	File: /main.tf:20-52
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/supply-chain-policies/terraform-policies/ensure-terraform-module-sources-use-tag
+
+		20 | module "marketing" {
+		21 |   source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
+		22 |   env_name       = "marketing" 
+		23 | 
+		24 |   # было
+		25 |   # network_id     = yandex_vpc_network.develop.id
+		26 |   # стало
+		27 |   network_id     = module.module_one.subnetwork_id
+		28 | 
+		29 |   subnet_zones   = ["ru-central1-a","ru-central1-d"]
+		30 |   
+		31 |   # было
+		32 |   # subnet_ids     = [yandex_vpc_subnet.develop.id]
+		33 |   # стало
+		34 |   subnet_ids     = [module.module_one.subnetwork_id]
+		35 | 
+		36 |   instance_name  = "slot"
+		37 |   instance_count = 1
+		38 |   image_family   = "ubuntu-2004-lts"
+		39 |   public_ip      = true
+		40 | 
+		41 |   labels = { 
+		42 |     owner= "i.ivanov",
+		43 |     project = "accounting"
+		44 |     department = "marketing"
+		45 |   }
+		46 | 
+		47 |   metadata = {
+		48 |     user-data          = data.template_file.cloudinit.rendered # Для демонстрации №3
+		49 |     serial-port-enable = 1
+		50 |   }
+		51 | 
+		52 | }
+
+Check: CKV_TF_1: "Ensure Terraform module sources use a commit hash"
+	FAILED for resource: analytics
+	File: /main.tf:54-86
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/supply-chain-policies/terraform-policies/ensure-terraform-module-sources-use-git-url-with-commit-hash-revision
+
+		54 | module "analytics" {
+		55 |   source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
+		56 |   env_name       = "analytics"
+		57 | 
+		58 |   # было
+		59 |   # network_id     = yandex_vpc_network.develop.id
+		60 |   # стало
+		61 |   network_id     = module.module_one.subnetwork_id
+		62 | 
+		63 |   subnet_zones   = ["ru-central1-a"]
+		64 |   
+		65 |   # было
+		66 |   # subnet_ids     = [yandex_vpc_subnet.develop.id]
+		67 |   # стало
+		68 |   subnet_ids     = [module.module_one.subnetwork_id]
+		69 |   
+		70 |   instance_name  = "slot"
+		71 |   instance_count = 1
+		72 |   image_family   = "ubuntu-2004-lts"
+		73 |   public_ip      = true
+		74 |   
+		75 |   labels = { 
+		76 |     owner= "i.petrov",
+		77 |     project = "collecting"
+		78 |     department = "analytics"
+		79 |   }
+		80 | 
+		81 |   metadata = {
+		82 |     user-data          = data.template_file.cloudinit.rendered # Для демонстрации №3
+		83 |     serial-port-enable = 1
+		84 |   }
+		85 | 
+		86 | }
+
+Check: CKV_TF_2: "Ensure Terraform module sources use a tag with a version number"
+	FAILED for resource: analytics
+	File: /main.tf:54-86
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/supply-chain-policies/terraform-policies/ensure-terraform-module-sources-use-tag
+
+		54 | module "analytics" {
+		55 |   source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
+		56 |   env_name       = "analytics"
+		57 | 
+		58 |   # было
+		59 |   # network_id     = yandex_vpc_network.develop.id
+		60 |   # стало
+		61 |   network_id     = module.module_one.subnetwork_id
+		62 | 
+		63 |   subnet_zones   = ["ru-central1-a"]
+		64 |   
+		65 |   # было
+		66 |   # subnet_ids     = [yandex_vpc_subnet.develop.id]
+		67 |   # стало
+		68 |   subnet_ids     = [module.module_one.subnetwork_id]
+		69 |   
+		70 |   instance_name  = "slot"
+		71 |   instance_count = 1
+		72 |   image_family   = "ubuntu-2004-lts"
+		73 |   public_ip      = true
+		74 |   
+		75 |   labels = { 
+		76 |     owner= "i.petrov",
+		77 |     project = "collecting"
+		78 |     department = "analytics"
+		79 |   }
+		80 | 
+		81 |   metadata = {
+		82 |     user-data          = data.template_file.cloudinit.rendered # Для демонстрации №3
+		83 |     serial-port-enable = 1
+		84 |   }
+		85 | 
+		86 | }

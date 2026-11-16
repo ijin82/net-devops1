@@ -1,0 +1,75 @@
+ijin@alt 🛠️ git:terraform-hotfix ~/Work/net-devops1/Terraform/04/src
+$ docker run --rm -v $(pwd):/data -t ghcr.io/terraform-linters/tflint
+10 issue(s) found:
+
+Warning: Module source "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main" uses a default branch as ref (main) (terraform_module_pinned_source)
+
+  on main.tf line 21:
+  21:   source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.17.0/docs/rules/terraform_module_pinned_source.md
+
+Warning: Module source "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main" uses a default branch as ref (main) (terraform_module_pinned_source)
+
+  on main.tf line 55:
+  55:   source         = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.17.0/docs/rules/terraform_module_pinned_source.md
+
+Warning: Missing version constraint for provider "template" in `required_providers` (terraform_required_providers)
+
+  on main.tf line 89:
+  89: data "template_file" "cloudinit" {
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.17.0/docs/rules/terraform_required_providers.md
+
+Warning: Missing version constraint for provider "yandex" in `required_providers` (terraform_required_providers)
+
+  on providers.tf line 5:
+   5:     yandex = {
+   6:       source = "yandex-cloud/yandex"
+   7:     }
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.17.0/docs/rules/terraform_required_providers.md
+
+Warning: Missing version constraint for provider "aws" in `required_providers` (terraform_required_providers)
+
+  on providers.tf line 43:
+  43: provider "aws" {
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.17.0/docs/rules/terraform_required_providers.md
+
+Warning: [Fixable] variable "default_cidr" is declared but not used (terraform_unused_declarations)
+
+  on variables.tf line 22:
+  22: variable "default_cidr" {
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.17.0/docs/rules/terraform_unused_declarations.md
+
+Warning: [Fixable] variable "vpc_name" is declared but not used (terraform_unused_declarations)
+
+  on variables.tf line 28:
+  28: variable "vpc_name" {
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.17.0/docs/rules/terraform_unused_declarations.md
+
+Warning: [Fixable] variable "vms_ssh_root_key" is declared but not used (terraform_unused_declarations)
+
+  on variables.tf line 36:
+  36: variable "vms_ssh_root_key" {
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.17.0/docs/rules/terraform_unused_declarations.md
+
+Warning: [Fixable] variable "vm_web_name" is declared but not used (terraform_unused_declarations)
+
+  on variables.tf line 43:
+  43: variable "vm_web_name" {
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.17.0/docs/rules/terraform_unused_declarations.md
+
+Warning: [Fixable] variable "vm_db_name" is declared but not used (terraform_unused_declarations)
+
+  on variables.tf line 50:
+  50: variable "vm_db_name" {
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.17.0/docs/rules/terraform_unused_declarations.md
