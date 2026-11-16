@@ -175,7 +175,7 @@ https://github.com/ijin82/net-devops1/pull/1
 - type=list(string), description="список ip-адресов" — проверка, что все адреса верны. Тесты:  ["192.168.0.1", "1.1.1.1", "127.0.0.1"] и ["192.168.0.1", "1.1.1.1", "1270.0.0.1"].
 
 **Решение:**  
-Переменные: `Terraform/05/variables.tf`
+Переменные: `Terraform/05/variables.tf`  
 Скриншоты:  
 `Terraform/05/Screenshots/Task4 - broken IP 2026-11-16 22-46-17.png`  
 
