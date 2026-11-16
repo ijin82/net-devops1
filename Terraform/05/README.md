@@ -176,7 +176,8 @@ https://github.com/ijin82/net-devops1/pull/1
 
 **Решение:**  
 Переменные: `Terraform/05/variables.tf`
-Скриншоты: 
+Скриншоты:  
+`Terraform/05/Screenshots/Task4 - broken IP 2026-11-16 22-46-17.png`  
 
 ## Дополнительные задания (со звёздочкой*)
 
