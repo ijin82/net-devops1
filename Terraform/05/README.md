@@ -208,6 +208,10 @@ variable "in_the_end_there_can_be_only_one" {
     }
 }
 ```
+
+**Решение:**  
+Код: `Terraform/05/variables.tf:40`
+
 ------
 ### Задание 6*
 
