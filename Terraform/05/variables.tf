@@ -91,7 +91,7 @@ variable "in_the_end_there_can_be_only_one" {
 
     validation {
         error_message = "There can be only one MacLeod"
-        # Прибиваем гвоздями возможные варианты
+        # Прибиваем гвоздями возможные варианты, красивее через сумму тех элементов что true но я до этого не додумался
         condition = (var.in_the_end_there_can_be_only_one.Dunkan && !var.in_the_end_there_can_be_only_one.Connor) || (var.in_the_end_there_can_be_only_one.Connor && !var.in_the_end_there_can_be_only_one.Dunkan)
     }
 }
