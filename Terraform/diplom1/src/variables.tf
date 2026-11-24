@@ -258,7 +258,6 @@ variable "security_group_egress" {
   ]
 }
 
-
 # cloud-init для Redis
 
 data "template_file" "cloudinit_redis" {
@@ -270,12 +269,15 @@ data "template_file" "cloudinit_redis" {
   template = file("./cloud-init-redis.yml")
 }
 
-# cloud-init для Application
+# Container Registry
 
-data "template_file" "cloudinit_app" {
-  vars = {
-    ssh_key_wm = var.ssh_key_wm
-  }
+variable "registry_id" {
+  description = "Yandex Container Registry ID"
+  type        = string
+}
 
-  template = file("./cloud-init-app.yml")
+variable "image_tag" {
+  description = "Tag of application images in Container Registry"
+  type        = string
+  default     = "latest"
 }

@@ -1,0 +1,53 @@
+#cloud-config
+users:
+  - name: ubuntu
+    groups: sudo
+    shell: /bin/bash
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    ssh_authorized_keys:
+      - ${ssh_key_wm}
+
+package_update: true
+package_upgrade: false
+packages:
+  - docker.io
+  - docker-compose-v2
+  - curl
+  - wget
+  - vim
+  - mc
+
+write_files:
+  # Реквизиты MySQL, Redis и приложения. Права 0600, владелец root:
+  # файл не читается непривилегированными пользователями ВМ.
+  - path: /opt/wired-mind/.env
+    permissions: '0600'
+    content: |
+      ${replace(env_file, "\n", "\n      ")}
+
+  - path: /opt/wired-mind/docker-compose.yml
+    permissions: '0644'
+    content: |
+      name: wired-mind
+
+      services:
+        app:
+          image: ${app_image}
+          restart: unless-stopped
+          env_file:
+            - .env
+        web:
+          image: ${web_image}
+          restart: unless-stopped
+          ports:
+            - "80:80"
+          depends_on:
+            - app
+
+runcmd:
+  - systemctl enable --now docker
+  # Ждем, пока managed MySQL начнет принимать подключения.
+  - bash -c 'until (echo > /dev/tcp/${db_host}/3306) 2>/dev/null; do sleep 3; done'
+  # Реестр публичный: docker login не нужен, образы тянутся анонимно.
+  - cd /opt/wired-mind && docker compose pull
+  - cd /opt/wired-mind && docker compose up -d
