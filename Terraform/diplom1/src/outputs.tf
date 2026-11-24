@@ -10,8 +10,8 @@ output "app_public_ip" {
 
 output "admin_password" {
   description = "Пароль администратора"
-  value       = random_password.admin.result
-  sensitive   = true
+  # Специально вывожу в демонстрационных целях
+  value       = nonsensitive(random_password.admin.result)
 }
 
 output "admin_login" {
