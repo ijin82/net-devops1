@@ -24,14 +24,32 @@ variable "default_cidr" {
 
 variable "internal_cidr" {
   type        = list(string)
-  default     = ["10.0.1.0/24"]
+  default     = ["10.0.2.0/24"]
   description = "https://cloud.yandex.ru/docs/vpc/operations/subnet-create"
+}
+
+variable "internal_cidrs" {
+  type        = list(string)
+  default     = ["10.0.1.0/24", "10.0.2.0/24"]
+  description = "cidr for internal ingress connections"
 }
 
 variable "vpc_name" {
   type        = string
   default     = "wm"
-  description = "VPC network & subnet name"
+  description = "VPC network"
+}
+
+variable "subnet_name" {
+  type        = string
+  default     = "wm"
+  description = "Subnet name with external access"
+}
+
+variable "subnet_internal_name" {
+  type        = string
+  default     = "wm_internal"
+  description = "Subnet name with internal only access"
 }
 
 variable "app_db_name" {
@@ -246,6 +264,7 @@ variable "security_group_egress" {
 data "template_file" "cloudinit_redis" {
   vars = {
     ssh_key_wm = var.ssh_key_wm
+    redis_password = random_password.redis.result
   }
 
   template = file("./cloud-init-redis.yml")

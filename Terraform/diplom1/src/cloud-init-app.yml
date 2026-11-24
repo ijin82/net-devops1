@@ -9,7 +9,7 @@ users:
 package_update: true
 package_upgrade: false
 packages:
-  - docker
+  - docker.io
   - vim
   - mc
   - wget

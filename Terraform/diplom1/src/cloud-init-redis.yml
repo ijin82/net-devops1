@@ -10,3 +10,13 @@ package_update: true
 package_upgrade: false
 packages:
   - redis
+write_files:
+  - path: /etc/redis/redis.conf.d/99-auth.conf
+    permissions: '0640'
+    content: |
+      requirepass ${redis_password}
+runcmd:
+  - chown redis:redis /etc/redis/redis.conf.d/99-auth.conf
+  - chmod 0640 /etc/redis/redis.conf.d/99-auth.conf
+  - grep -q 'redis.conf.d' /etc/redis/redis.conf || printf '\ninclude /etc/redis/redis.conf.d/*.conf\n' >> /etc/redis/redis.conf
+  - systemctl restart redis-server
