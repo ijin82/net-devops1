@@ -164,7 +164,8 @@ resource "yandex_vpc_address" "app" {
 }
 
 locals {
-  registry = "cr.yandex/${var.registry_id}"
+  registry    = "cr.yandex/${var.registry_id}"
+  admin_email = "admin@example.com"
 
   # Единый источник реквизитов для приложения: IP/пароли MySQL и Redis,
   # ключ Laravel и учетка администратора.
@@ -199,7 +200,7 @@ locals {
     REDIS_DB       = "0"
     REDIS_CACHE_DB = "1"
 
-    ADMIN_EMAIL    = "admin@example.com"
+    ADMIN_EMAIL    = local.admin_email
     ADMIN_PASSWORD = random_password.admin.result
   }
 
@@ -259,10 +260,10 @@ resource "yandex_compute_instance" "application" {
     yandex_compute_instance.redis,
   ]
 
-  name          = var.server_name_app
-  platform_id   = var.platform_id
-  zone          = var.default_zone
-  hostname      = var.vm_app_resources.hostname
+  name        = var.server_name_app
+  platform_id = var.platform_id
+  zone        = var.default_zone
+  hostname    = var.vm_app_resources.hostname
 
   resources {
     cores         = var.vm_app_resources.cores
