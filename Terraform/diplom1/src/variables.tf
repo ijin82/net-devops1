@@ -276,8 +276,14 @@ variable "registry_id" {
   type        = string
 }
 
-variable "image_tag" {
-  description = "Tag of application images in Container Registry"
+variable "image_tag_app" {
+  description = "Tag of application image in Container Registry"
   type        = string
-  default     = "latest"
+  default     = "1.0.0"
+}
+
+variable "image_tag_web" {
+  description = "Tag of web image in Container Registry"
+  type        = string
+  default     = "1.0.1"
 }

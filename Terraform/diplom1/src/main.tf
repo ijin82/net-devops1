@@ -298,8 +298,8 @@ resource "yandex_compute_instance" "application" {
     user-data = templatefile("${path.module}/cloud-init-app.yml.tftpl", {
       ssh_key_wm = var.ssh_key_wm
       env_file   = local.env_file
-      app_image  = "${local.registry}/wired-mind-app:${var.image_tag}"
-      web_image  = "${local.registry}/wired-mind-web:${var.image_tag}"
+      app_image  = "${local.registry}/wired-mind-app:${var.image_tag_app}"
+      web_image  = "${local.registry}/wired-mind-web:${var.image_tag_web}"
       db_host    = tolist(yandex_mdb_mysql_cluster.cluster.host)[0].fqdn
     })
     serial-port-enable = 1
