@@ -7,10 +7,10 @@
 - Создайте Virtual Private Cloud (VPC). + сделано
 - Создайте подсети. + одна для ВМ с внешними подключениями и одна для тех у кого внутренние подключения
 - Создайте виртуальные машины (VM):
-  - Настройте группы безопасности (порты 22, 80, 443). + настроено
-  - Привяжите группу безопасности к VM. + сделано
-  - Опишите создание БД MySQL в Yandex Cloud. + сделано, через yandex_mdb_mysql_cluster
-  - Опишите создание Container Registry +
+  - Настройте группы безопасности (порты 22, 80, 443). + настроено `main.tf`
+  - Привяжите группу безопасности к VM. + сделано `vms.tf`
+  - Опишите создание БД MySQL в Yandex Cloud. + сделано, через yandex_mdb_mysql_cluster `managed.tf`
+  - Опишите создание Container Registry - создал реестр в панели управления YC, в правах доступа создал роль "container-registry.images.puller" для "All users"
 
   Репозиторий с демонстрационным приложением: [https://github.com/ijin82/laravel-demo-app](https://github.com/ijin82/laravel-demo-app)
 
@@ -71,7 +71,11 @@
 
 - Всего будет 1 сервис (MySQL cluster) + настроенная виртуальная машина для приложения + виртуальная машина для редиса + образ приложения в registry
 - Для mysql надо сервисному аккаунту добавить роли в каталоге: managed-mysql.admin
-
+- Разнес код так:
+  - `Terraform/diplom1/src/main.tf` - настройки сетей, групп безопасности
+  - `Terraform/diplom1/src/managed.tf` - managed сервисы, в моем случае только MySQL
+  - `Terraform/diplom1/src/vms.tf` - настройки виртуальных машин
+  - `https://github.com/ijin82/laravel-demo-app/tree/main/docker` - настройки контейнеров для registry в демонстрационном проекте
 
 **REM:** пробовал использовать redis managed но отказался потому что прямо долго ставится (больше 15 мин и падает).
 
@@ -85,7 +89,9 @@
 
 ### Решение (2)
 
-Сделано
+- `Terraform/diplom1/src/vms.tf:148` - ВМ приложения, в т.ч. установка `docker.io`
+- `Terraform/diplom1/src/variables.tf:263` - cloud-init для Redis, в т.ч. настройка пароля
+- `Terraform/diplom1/src/vms.tf:61` - ВМ Redis, в т.ч. строка `98` применение собранного cloud-init конфига
 
 ## Задание 3
 
@@ -93,7 +99,10 @@
 
 ### Решение (3)
 
-В демонстрационном репозитории:  
+Демонстрационное приложение, конфиги docker
+`https://github.com/ijin82/laravel-demo-app/tree/main/docker`
+
+В репозитории c демонстрационным приложением:  
 `docker-compose.yml`  
 `docker/nginx/Dockerfile`  
 `docker/php/Dockerfile`  
@@ -104,7 +113,8 @@
 
 ### Решение (4)
 
-Заработало, подключено к managed MySQL.
+- `Terraform/diplom1/src/managed.tf` - настройка managed MySQL
+- `Terraform/diplom1/src/vms.tf:34` - применение полученных настроек для генерации .env приложения
 
 ## Задание 5*
 
